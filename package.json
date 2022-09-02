@@ -11,17 +11,7 @@
         "publish": "electron-forge publish",
         "lint": "eslint src/ --ext .ts,.js,.tsx,.jsx"
     },
-    "keywords": [
-        "electron boilerplate",
-        "minimal",
-        "electron-webpack",
-        "electron-react",
-        "electron-typescript",
-        "hmr",
-        "boilerplate",
-        "2022",
-        "ERWT"
-    ],
+    "keywords": [],
     "repository": {
         "type": "git",
         "url": "https://github.com/westoncb/generation-q"
