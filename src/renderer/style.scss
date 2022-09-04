@@ -1,0 +1,79 @@
+body {
+    padding: 0;
+    margin: 0;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+#app-root {
+    width: 100vw;
+    height: 100vh;
+}
+
+.application {
+    display: flex;
+    flex-direction: column;
+    background-color: #f2f5f8;
+    color: #303132;
+    height: 100%;
+    width: 100%;
+}
+
+.everything-above-status {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.main-left-column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+    min-width: 12rem;
+    max-width: 30rem;
+    width: 25%;
+    border-right: 2px solid #9ca3ac;
+}
+
+.main-area {
+    flex-grow: 1;
+}
+
+.status-region {
+    flex-grow: 0;
+    border-top: 1px solid #9ca3ac;
+    padding: 0.5rem;
+    background-color: #c0c5c9;
+    font-size: 0.8rem;
+    color: #3e3e3e;
+}
+
+.queue-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.queue {
+    min-width: fit-content;
+}
+
+.queue-item {
+    width: unset !important;
+    margin: 6px;
+    background-color: #b9cbd8;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.125);
+}
+
+.dragging-queue-item {
+    background: #a8c5dd;
+}
+
+.prompt-text-preview {
+    font-size: 0.8rem;
+}
+
+.primary-button {
+    background-color: #70d2af;
+    color: black;
+}
