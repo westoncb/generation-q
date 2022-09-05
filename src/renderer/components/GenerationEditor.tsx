@@ -13,7 +13,7 @@ export default function GenerationEditor({ gTask }) {
         strokeWidth: 4,
         eraserWidth: 5,
         strokeColor: "#000000",
-        canvasColor: "#FFFFFF",
+        canvasColor: "#d5e2de",
         style: { borderRight: "1px solid #CCC" },
         svgStyle: {},
         exportWithBackgroundImage: true,
