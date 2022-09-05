@@ -1,8 +1,19 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { ReactSketchCanvas } from "react-sketch-canvas"
-import { InputLabel, TextField, Slider, Box, Button } from "@mui/material"
+import {
+    InputLabel,
+    TextField,
+    Slider,
+    Box,
+    Button,
+    Checkbox,
+    Switch,
+    FormControl,
+    Divider,
+} from "@mui/material"
 import { getState } from "../store"
 import DeleteIcon from "@mui/icons-material/Delete"
+import isNil from "lodash.isnil"
 
 export default function GenerationEditor({ gTask }) {
     const [canvasProps, setCanvasProps] = useState({
@@ -11,15 +22,34 @@ export default function GenerationEditor({ gTask }) {
         height: "500px",
         preserveBackgroundImageAspectRatio: "none",
         strokeWidth: 4,
-        eraserWidth: 5,
         strokeColor: "#000000",
         canvasColor: "#d5e2de",
-        style: { borderRight: "1px solid #CCC" },
-        svgStyle: {},
+        style: { borderRight: "0" },
         exportWithBackgroundImage: true,
-        withTimestamp: true,
-        allowOnlyPointerType: "all",
     })
+
+    const [generatedArgs, setGeneratedArgs] = useState("")
+
+    useEffect(() => {
+        if (!isNil(gTask?.specialArgs)) {
+            const argString = Object.entries(gTask.specialArgs).reduce(
+                (
+                    result: string,
+                    [key, curArg]: [string, { enabled: boolean; param: string }]
+                ) =>
+                    result +
+                    (curArg.enabled
+                        ? `${curArg.param}${gTask[key]}` + " "
+                        : ""),
+                ""
+            )
+            setGeneratedArgs(argString)
+        }
+    }, [gTask])
+
+    const updateGTask = (prop, val) => {
+        getState().updateItem({ ...gTask, [prop]: val })
+    }
 
     if (gTask === null) {
         return getPlaceholder()
@@ -56,12 +86,12 @@ export default function GenerationEditor({ gTask }) {
                             alignItems: "stretch",
                         }}
                     >
+                        {getArgCustomizer("prompt", gTask)}
                         <TextField
-                            sx={{ mb: "1rem" }}
+                            sx={{ mb: "2rem" }}
                             className="genq-basic-input"
-                            label="Prompt"
                             multiline
-                            rows={5}
+                            rows={6}
                             aria-label="prompt"
                             placeholder="what would you like to generate?"
                             variant="outlined"
@@ -73,10 +103,103 @@ export default function GenerationEditor({ gTask }) {
                                 })
                             }}
                         />
+
+                        {getArgCustomizer("width", gTask)}
+                        <FormControl
+                            sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
+                                mb: "1rem",
+                            }}
+                        >
+                            <span
+                                style={{ marginRight: "1rem" }}
+                                className="aux-value-display"
+                            >
+                                {gTask.width}
+                            </span>
+                            <Slider
+                                min={256}
+                                max={1024}
+                                step={64}
+                                value={gTask.width}
+                                onChange={(e, val) =>
+                                    updateGTask("width", val as number)
+                                }
+                                marks
+                                valueLabelDisplay="auto"
+                                sx={{
+                                    display: "inline-block",
+                                    ml: "0.5rem",
+                                    flexGrow: 1,
+                                }}
+                            />
+                        </FormControl>
+
+                        {getArgCustomizer("height", gTask)}
+                        <FormControl
+                            sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
+                                mb: "1rem",
+                            }}
+                        >
+                            <span
+                                style={{ marginRight: "1rem" }}
+                                className="aux-value-display"
+                            >
+                                {gTask.height}
+                            </span>
+                            <Slider
+                                min={256}
+                                max={1024}
+                                step={64}
+                                value={gTask.height}
+                                onChange={(e, val) =>
+                                    updateGTask("height", val as number)
+                                }
+                                marks
+                                valueLabelDisplay="auto"
+                                sx={{
+                                    display: "inline-block",
+                                    ml: "0.5rem",
+                                    flexGrow: 1,
+                                }}
+                            />
+                        </FormControl>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
+                                marginBottom: "2rem",
+                            }}
+                        >
+                            {getArgCustomizer("seed", gTask)}
+                            <TextField
+                                sx={{ ml: "1rem" }}
+                                inputProps={{
+                                    style: {
+                                        padding: "0.5rem",
+                                    },
+                                }}
+                                className="genq-basic-input"
+                                onChange={e =>
+                                    updateGTask("seed", Number(e.target.value))
+                                }
+                                value={gTask?.seed}
+                            />
+                        </div>
+
                         <TextField
-                            sx={{ mb: "1rem" }}
+                            sx={{ mb: "2rem" }}
                             className="genq-basic-input"
                             label="Command"
+                            rows={2}
+                            multiline
                             aria-label="command"
                             placeholder="enter command to execute, e.g. `python ~/sd/scripts/dream.py`"
                             defaultValue=""
@@ -84,16 +207,27 @@ export default function GenerationEditor({ gTask }) {
                         />
                         <TextField
                             className="genq-basic-input"
-                            label="Args"
+                            label="Custom args"
+                            rows={4}
+                            multiline
                             aria-label="args"
-                            placeholder="enter additional args you'd like to pass in, e.g. `--seed 42`"
+                            placeholder="enter additional args you'd like to pass in, e.g. `--iterations 42`"
                             defaultValue=""
+                            variant="outlined"
+                        />
+                        <TextField
+                            disabled
+                            className="aux-value-display"
+                            rows={4}
+                            multiline
+                            aria-label="auto-args"
+                            value={generatedArgs}
+                            placeholder="no generated args"
                             variant="outlined"
                         />
                     </div>
                     <div>
                         <Button
-                            sx={{ ml: "1rem" }}
                             endIcon={<DeleteIcon />}
                             variant="outlined"
                             onClick={e => {
@@ -105,7 +239,11 @@ export default function GenerationEditor({ gTask }) {
                     </div>
                 </div>
                 <div style={{ flexGrow: "1" }}>
-                    <InputLabel>Initialization image</InputLabel>
+                    {getArgCustomizer(
+                        "initImage",
+                        gTask,
+                        "Initialization image"
+                    )}
                     <div
                         style={{
                             border: "1px dashed gray",
@@ -157,6 +295,71 @@ export default function GenerationEditor({ gTask }) {
             </Box>
         )
     }
+}
+
+function getArgCustomizer(paramName, gTask, label?: string) {
+    if (isNil(label)) {
+        label = paramName.charAt(0).toUpperCase() + paramName.slice(1)
+    }
+
+    return (
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+            }}
+        >
+            <InputLabel sx={{ flexShrink: 0 }}>{label}</InputLabel>
+            <Checkbox
+                checked={gTask.specialArgs[paramName].enabled}
+                onChange={(e, val) => {
+                    getState().updateItem({
+                        ...gTask,
+                        specialArgs: {
+                            ...gTask.specialArgs,
+                            [paramName]: {
+                                ...gTask.specialArgs[paramName],
+                                enabled: val,
+                            },
+                        },
+                    })
+                }}
+                color="default"
+            />
+            <TextField
+                inputProps={{
+                    style: {
+                        padding: "0.25rem",
+                    },
+                }}
+                size="small"
+                value={gTask?.specialArgs[paramName].param}
+                onChange={e =>
+                    getState().updateItem({
+                        ...gTask,
+                        specialArgs: {
+                            ...gTask.specialArgs,
+                            [paramName]: {
+                                ...gTask.specialArgs[paramName],
+                                param: e.target.value,
+                            },
+                        },
+                    })
+                }
+            />
+        </div>
+    )
+}
+
+function getDimensionMarks(count, increment, base) {
+    const marks = []
+    for (let i = 0; i < count; i++) {
+        const value = base + increment * i
+        marks.push({ value, label: value })
+    }
+
+    return marks
 }
 
 function getPlaceholder() {

@@ -14,18 +14,18 @@ body {
 }
 
 .application {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 1fr 2rem;
     background-color: #f2f5f8;
     color: #303132;
     height: 100%;
+    max-height: 100%;
     width: 100%;
 }
 
 .everything-above-status {
     display: flex;
     flex-direction: row;
-    flex-grow: 1;
 }
 
 .main-left-column {
@@ -41,7 +41,6 @@ body {
 }
 
 .status-region {
-    flex-grow: 0;
     border-top: 1px solid #9ca3ac;
     padding: 0.5rem;
     background-color: #dadee1;
@@ -76,6 +75,10 @@ body {
 
 .selected {
     outline: 4px dashed #70d2af;
+    background-color: #c9ebe8;
+    &:hover {
+        background-color: #d9fbf8;
+    }
 }
 
 .dragging-queue-item {
@@ -103,8 +106,16 @@ body {
         rgba(0, 0, 0, 0) 1px
     );
     flex-grow: 1;
+    overflow-y: scroll;
 }
 
 .genq-basic-input {
     background-color: white;
+}
+
+.aux-value-display {
+    padding: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    border: 1px solid #6663;
 }

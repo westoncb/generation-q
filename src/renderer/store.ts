@@ -3,7 +3,7 @@ import create from "zustand"
 
 const testData: GenerationTask[] = [
     new GenerationTask(
-        "The Doom marine riding a Yorp into the sunset, trending on Art Station HQ"
+        `"The Doom marine riding a Yorp into the sunset, trending on Art Station HQ"`
     ),
 ]
 
