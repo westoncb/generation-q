@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { Draggable } from "react-beautiful-dnd"
 import GenerationTask from "@src/generationTask"
 import isEmpty from "lodash.isempty"
+import { getState, setState } from "../store"
 
 export default function QueueItem({
     item,
@@ -11,15 +12,29 @@ export default function QueueItem({
     index: number
 }) {
     return (
-        <Draggable draggableId={`${item.id}`} index={index} key={item.id}>
+        <Draggable
+            disableInteractiveElementBlocking
+            draggableId={`${item.id}`}
+            index={index}
+            key={item.id}
+        >
             {(provided, snapshot) => (
                 <div
+                    onClick={e => {
+                        console.log("got the click", e)
+                        setState({ selectedTaskId: item.id })
+                        e.stopPropagation()
+                    }}
+                    tabIndex={"-1"}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     className={
                         "queue-item " +
-                        (snapshot.isDragging ? "dragging-queue-item" : "")
+                        (snapshot.isDragging ? "dragging-queue-item" : "") +
+                        (getState().selectedTaskId === item.id
+                            ? "selected"
+                            : "")
                     }
                 >
                     <div className="prompt-text-preview">
@@ -35,6 +50,6 @@ function getDisplayText(item) {
     if (!isEmpty(item.prompt)) {
         return item.prompt
     } else {
-        return "<new task>"
+        return <i style={{ color: "#666" }}>empty task</i>
     }
 }

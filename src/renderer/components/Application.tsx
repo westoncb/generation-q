@@ -8,17 +8,20 @@ import Queue from "./Queue"
 import "../style.scss"
 import { Button } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
-import { useStore } from "../store"
+import { setState, getState, useStore } from "../store"
 import GenerationEditor from "./GenerationEditor"
 import GenerationTask from "@src/generationTask"
+import shallow from "zustand/shallow"
 
 const GENERATION_EDITOR = 0
 const COMPLETED_GENERATIONS = 1
 const GALLERY = 2
 
 export default function Application() {
-    const { queue, addToQueue } = useStore()
-    const [selectedTask, setSelectedTask] = useState(null)
+    const { queue, selectedTaskId } = useStore(
+        state => ({ queue: state.queue, selectedTaskId: state.selectedTaskId }),
+        shallow
+    )
     const [tabIndex, setTabIndex] = useState(GENERATION_EDITOR)
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -36,8 +39,8 @@ export default function Application() {
                         endIcon={<AddIcon />}
                         onClick={e => {
                             const newTask = new GenerationTask("")
-                            setSelectedTask(newTask)
-                            addToQueue(newTask)
+                            setState({ selectedTaskId: newTask.id })
+                            getState().addToQueue(newTask)
                         }}
                     >
                         New Generation
@@ -70,17 +73,15 @@ export default function Application() {
                             </Tabs>
                         </Box>
                         <TabPanel value={tabIndex} index={GENERATION_EDITOR}>
-                            <GenerationEditor gTask={selectedTask} />
+                            <GenerationEditor
+                                gTask={getState().getTask(selectedTaskId)}
+                            />
                         </TabPanel>
                         <TabPanel
                             value={tabIndex}
                             index={COMPLETED_GENERATIONS}
-                        >
-                            Item Two
-                        </TabPanel>
-                        <TabPanel value={tabIndex} index={GALLERY}>
-                            Item Three
-                        </TabPanel>
+                        ></TabPanel>
+                        <TabPanel value={tabIndex} index={GALLERY}></TabPanel>
                     </Box>
                 </div>
             </div>

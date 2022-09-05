@@ -25,7 +25,10 @@ export default function Queue({ items }: QueueProps) {
         setState({ queue: newItemSequence })
     }
     return (
-        <Box className="queue-wrapper">
+        <Box
+            onClick={e => setState({ selectedTaskId: "-1" })}
+            className="queue-wrapper"
+        >
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="droppable-list">
                     {provided => (

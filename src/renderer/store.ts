@@ -5,20 +5,16 @@ const testData: GenerationTask[] = [
     new GenerationTask(
         "The Doom marine riding a Yorp into the sunset, trending on Art Station HQ"
     ),
-    new GenerationTask("Colorado"),
-    new GenerationTask("Kansas"),
-    new GenerationTask("New York"),
-    new GenerationTask("Arkansas"),
-    new GenerationTask("Utah"),
-    new GenerationTask("Texas"),
-    new GenerationTask("California"),
 ]
 
 type MainState = {
     queue?: GenerationTask[]
+    selectedTaskId?: string
+    getTask?: (id: string) => GenerationTask
     addToQueue?: (item: GenerationTask) => void
     updateQueue?: (newQueue: GenerationTask[]) => void
     removeFromQueue?: (id: string) => void
+    updateItem?: (item: GenerationTask) => void
 }
 
 let getState: () => MainState
@@ -28,13 +24,27 @@ const useStore = create<MainState>((set, get) => {
     setState = set
     return {
         queue: testData,
+        selectedTaskId: "-1",
+        getTask: id => {
+            return get().queue.find(item => item.id === id) ?? null
+        },
         addToQueue: item => {
             set({ queue: [...get().queue, item] })
         },
         updateQueue: newQueue => {
             set({ queue: newQueue })
         },
-        removeFromQueue: id => {},
+        updateItem: item => {
+            const index = get().queue.findIndex(
+                curItem => curItem.id === item.id
+            )
+            const newQueue = get().queue.slice()
+            newQueue[index] = item
+            set({ queue: newQueue })
+        },
+        removeFromQueue: id => {
+            set({ queue: get().queue.filter(item => item.id !== id) })
+        },
     }
 })
 

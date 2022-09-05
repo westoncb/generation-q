@@ -1,3 +1,7 @@
+html {
+    font-size: 14px;
+}
+
 body {
     padding: 0;
     margin: 0;
@@ -28,9 +32,6 @@ body {
     display: flex;
     flex-direction: column;
     flex-grow: 0;
-    min-width: 12rem;
-    max-width: 30rem;
-    width: 25%;
     border-right: 2px solid #9ca3ac;
 }
 
@@ -51,19 +52,30 @@ body {
 .queue-wrapper {
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .queue {
-    min-width: fit-content;
 }
 
 .queue-item {
-    width: unset !important;
-    margin: 6px;
+    width: 18rem;
+    margin: 0.5rem;
+    margin-bottom: 0.75rem;
     background-color: #b9cbd8;
+    border: 1px solid #a9bbc8;
     padding: 1rem;
     border-radius: 5px;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.125);
+    box-sizing: border-box;
+
+    &:hover {
+        background-color: #c9dbe8;
+    }
+}
+
+.selected {
+    outline: 4px dashed #70d2af;
 }
 
 .dragging-queue-item {
@@ -72,10 +84,13 @@ body {
 
 .prompt-text-preview {
     font-size: 0.8rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .primary-button {
-    background-color: #70d2af !important;
+    background-color: #9aa7ec !important;
     color: black !important;
 }
 
@@ -88,4 +103,8 @@ body {
         rgba(0, 0, 0, 0) 1px
     );
     flex-grow: 1;
+}
+
+.genq-basic-input {
+    background-color: white;
 }
