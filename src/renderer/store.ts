@@ -1,21 +1,20 @@
-import { GenerationTask } from "@src/types"
+import GenerationTask from "@src/generationTask"
 import create from "zustand"
 
 const testData: GenerationTask[] = [
-    {
-        id: "81",
-        prompt: "The Doom marine riding a Yorp into the sunset, trending on Art Station HQ",
-    },
-    { id: "93", prompt: "Colorado" },
-    { id: "110", prompt: "Kansas" },
-    { id: "121", prompt: "Minnesota" },
-    { id: "132", prompt: "New York" },
-    { id: "143", prompt: "Virginia" },
-    { id: "164", prompt: "Georgia" },
-    { id: "150", prompt: "Florida" },
+    new GenerationTask(
+        "The Doom marine riding a Yorp into the sunset, trending on Art Station HQ"
+    ),
+    new GenerationTask("Colorado"),
+    new GenerationTask("Kansas"),
+    new GenerationTask("New York"),
+    new GenerationTask("Arkansas"),
+    new GenerationTask("Utah"),
+    new GenerationTask("Texas"),
+    new GenerationTask("California"),
 ]
 
-interface MainState {
+type MainState = {
     queue?: GenerationTask[]
     addToQueue?: (item: GenerationTask) => void
     updateQueue?: (newQueue: GenerationTask[]) => void

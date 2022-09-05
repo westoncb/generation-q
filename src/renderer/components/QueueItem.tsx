@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Draggable } from "react-beautiful-dnd"
-import { GenerationTask } from "@src/types"
+import GenerationTask from "@src/generationTask"
+import isEmpty from "lodash.isempty"
 
 export default function QueueItem({
     item,
@@ -21,9 +22,19 @@ export default function QueueItem({
                         (snapshot.isDragging ? "dragging-queue-item" : "")
                     }
                 >
-                    <div className="prompt-text-preview">{item.prompt}</div>
+                    <div className="prompt-text-preview">
+                        {getDisplayText(item)}
+                    </div>
                 </div>
             )}
         </Draggable>
     )
+}
+
+function getDisplayText(item) {
+    if (!isEmpty(item.prompt)) {
+        return item.prompt
+    } else {
+        return "<new task>"
+    }
 }

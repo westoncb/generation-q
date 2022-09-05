@@ -9,9 +9,21 @@ import "../style.scss"
 import { Button } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 import { useStore } from "../store"
+import GenerationEditor from "./GenerationEditor"
+import GenerationTask from "@src/generationTask"
+
+const GENERATION_EDITOR = 0
+const COMPLETED_GENERATIONS = 1
+const GALLERY = 2
 
 export default function Application() {
-    const { queue } = useStore()
+    const { queue, addToQueue } = useStore()
+    const [selectedTask, setSelectedTask] = useState(null)
+    const [tabIndex, setTabIndex] = useState(GENERATION_EDITOR)
+
+    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+        setTabIndex(newValue)
+    }
 
     return (
         <div className="application">
@@ -22,13 +34,54 @@ export default function Application() {
                         sx={{ margin: "0.5rem" }}
                         variant="contained"
                         endIcon={<AddIcon />}
+                        onClick={e => {
+                            const newTask = new GenerationTask("")
+                            setSelectedTask(newTask)
+                            addToQueue(newTask)
+                        }}
                     >
                         New Generation
                     </Button>
                     <Queue items={queue} />
                 </div>
                 <div className="main-area">
-                    <BasicTabs />
+                    <Box
+                        sx={{
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "column",
+                        }}
+                    >
+                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                            <Tabs
+                                value={tabIndex}
+                                onChange={handleTabChange}
+                                aria-label="basic tabs example"
+                            >
+                                <Tab
+                                    label="Generation Editor"
+                                    {...a11yProps(0)}
+                                />
+                                <Tab
+                                    label="Completed Generations"
+                                    {...a11yProps(1)}
+                                />
+                                <Tab label="Gallery" {...a11yProps(2)} />
+                            </Tabs>
+                        </Box>
+                        <TabPanel value={tabIndex} index={GENERATION_EDITOR}>
+                            <GenerationEditor gTask={selectedTask} />
+                        </TabPanel>
+                        <TabPanel
+                            value={tabIndex}
+                            index={COMPLETED_GENERATIONS}
+                        >
+                            Item Two
+                        </TabPanel>
+                        <TabPanel value={tabIndex} index={GALLERY}>
+                            Item Three
+                        </TabPanel>
+                    </Box>
                 </div>
             </div>
             <StatusRegion />
@@ -47,17 +100,14 @@ function TabPanel(props: TabPanelProps) {
 
     return (
         <div
+            className="tab-panel"
             role="tabpanel"
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
+            {value === index && children}
         </div>
     )
 }
@@ -67,37 +117,4 @@ function a11yProps(index: number) {
         id: `simple-tab-${index}`,
         "aria-controls": `simple-tabpanel-${index}`,
     }
-}
-
-function BasicTabs() {
-    const [value, setValue] = React.useState(0)
-
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue)
-    }
-
-    return (
-        <Box sx={{ width: "100%" }}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    aria-label="basic tabs example"
-                >
-                    <Tab label="Generation Editor" {...a11yProps(0)} />
-                    <Tab label="Completed Tasks" {...a11yProps(1)} />
-                    <Tab label="Gallery" {...a11yProps(2)} />
-                </Tabs>
-            </Box>
-            <TabPanel value={value} index={0}>
-                Item One
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                Item Two
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                Item Three
-            </TabPanel>
-        </Box>
-    )
 }

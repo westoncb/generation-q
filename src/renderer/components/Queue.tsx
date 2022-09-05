@@ -4,7 +4,7 @@ import { Box } from "@mui/material"
 
 import { reorder } from "../../utils/helpers"
 import QueueItem from "./QueueItem"
-import { GenerationTask } from "@src/types"
+import GenerationTask from "@src/generationTask"
 import { setState } from "../store"
 
 type QueueProps = { items: GenerationTask[] }
