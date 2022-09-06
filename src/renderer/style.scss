@@ -85,7 +85,7 @@ body {
     box-sizing: border-box;
 
     &:hover {
-        background-color: #b9dbd8;
+        background-color: #b9d2d8;
     }
 }
 
@@ -176,6 +176,8 @@ body {
     justify-content: space-between;
     padding-right: 1rem;
     color: #999;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 0.5rem;
 }
 
 .big-icon {

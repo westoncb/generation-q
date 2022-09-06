@@ -51,6 +51,6 @@ function getDisplayText(item) {
     if (!isEmpty(item.prompt)) {
         return item.prompt
     } else {
-        return <i style={{ color: "#666" }}>empty task</i>
+        return <i style={{ color: "#666" }}>empty prompt</i>
     }
 }

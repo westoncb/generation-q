@@ -269,6 +269,7 @@ export default function GenerationEditor({ gTask }) {
                             >
                                 <span className="ready-text">Ready?</span>
                                 <Switch
+                                    checked={gTask.ready}
                                     onChange={(e, val) =>
                                         updateGTask("ready", val)
                                     }
