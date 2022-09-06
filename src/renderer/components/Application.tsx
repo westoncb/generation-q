@@ -48,41 +48,30 @@ export default function Application() {
                     <Queue items={queue} />
                 </div>
                 <div className="main-area">
-                    <Box
-                        sx={{
-                            width: "100%",
-                            display: "flex",
-                            flexDirection: "column",
-                        }}
-                    >
-                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                            <Tabs
-                                value={tabIndex}
-                                onChange={handleTabChange}
-                                aria-label="basic tabs example"
-                            >
-                                <Tab
-                                    label="Generation Editor"
-                                    {...a11yProps(0)}
-                                />
-                                <Tab
-                                    label="Completed Generations"
-                                    {...a11yProps(1)}
-                                />
-                                <Tab label="Gallery" {...a11yProps(2)} />
-                            </Tabs>
-                        </Box>
-                        <TabPanel value={tabIndex} index={GENERATION_EDITOR}>
-                            <GenerationEditor
-                                gTask={getState().getTask(selectedTaskId)}
-                            />
-                        </TabPanel>
-                        <TabPanel
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <Tabs
                             value={tabIndex}
-                            index={COMPLETED_GENERATIONS}
-                        ></TabPanel>
-                        <TabPanel value={tabIndex} index={GALLERY}></TabPanel>
+                            onChange={handleTabChange}
+                            aria-label="basic tabs example"
+                        >
+                            <Tab label="Generation Editor" {...a11yProps(0)} />
+                            <Tab
+                                label="Completed Generations"
+                                {...a11yProps(1)}
+                            />
+                            <Tab label="Gallery" {...a11yProps(2)} />
+                        </Tabs>
                     </Box>
+                    <TabPanel value={tabIndex} index={GENERATION_EDITOR}>
+                        <GenerationEditor
+                            gTask={getState().getTask(selectedTaskId)}
+                        />
+                    </TabPanel>
+                    <TabPanel
+                        value={tabIndex}
+                        index={COMPLETED_GENERATIONS}
+                    ></TabPanel>
+                    <TabPanel value={tabIndex} index={GALLERY}></TabPanel>
                 </div>
             </div>
             <StatusRegion />

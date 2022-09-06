@@ -11,6 +11,7 @@ body {
 #app-root {
     width: 100vw;
     height: 100vh;
+    max-height: 100vh;
 }
 
 .application {
@@ -24,37 +25,52 @@ body {
 }
 
 .everything-above-status {
-    display: flex;
-    flex-direction: row;
+    position: relative;
+    display: grid;
+    grid-template-columns: 19rem 1fr;
+    min-height: 0;
+    min-width: 0;
 }
 
 .main-left-column {
+    position: absolute;
+    top: 0;
+    bottom: 0;
     display: flex;
     flex-direction: column;
-    flex-grow: 0;
+    align-items: stretch;
     border-right: 2px solid #9ca3ac;
-}
-
-.main-area {
-    display: flex;
-    flex-grow: 1;
-}
-
-.status-region {
-    border-top: 1px solid #9ca3ac;
-    padding: 0.5rem;
-    background-color: #dadee1;
-    font-size: 0.8rem;
-    color: #3e3e3e;
+    min-height: 0;
+    min-width: 19rem;
+    overflow-y: scroll;
 }
 
 .queue-wrapper {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    flex-grow: 1;
 }
 
 .queue {
+}
+
+.main-area {
+    position: absolute;
+    left: 19rem;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    max-height: 100%;
+    display: grid;
+    grid-template-rows: 3.5rem 1fr;
+}
+
+.status-region {
+    border-top: 2px solid #9ca3ac;
+    padding: 0.5rem;
+    background-color: #dadee1;
+    font-size: 0.8rem;
+    color: #3e3e3e;
 }
 
 .queue-item {
@@ -98,6 +114,7 @@ body {
 }
 
 .tab-panel {
+    overflow-y: scroll;
     // dot pattern
     background-size: 12px 12px;
     background-image: radial-gradient(
@@ -105,8 +122,6 @@ body {
         #bbccee 1px,
         rgba(0, 0, 0, 0) 1px
     );
-    flex-grow: 1;
-    overflow-y: scroll;
 }
 
 .genq-basic-input {
