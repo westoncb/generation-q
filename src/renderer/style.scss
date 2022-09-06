@@ -85,16 +85,21 @@ body {
     box-sizing: border-box;
 
     &:hover {
-        background-color: #c9dbe8;
+        background-color: #b9dbd8;
     }
+}
+
+.not-ready {
+    background-color: #b9cbd844;
+    border: 1px dashed #a9bbc8;
 }
 
 .selected {
     outline: 4px dashed #70d2af;
-    background-color: #c9ebe8;
-    &:hover {
-        background-color: #d9fbf8;
-    }
+    // background-color: #c9ebe8;
+    // &:hover {
+    //     background-color: #d9fbf8;
+    // }
 }
 
 .dragging-queue-item {
@@ -133,4 +138,47 @@ body {
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
     border: 1px solid #6663;
+}
+
+.ready-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #94e4a8;
+    border-radius: 5px;
+    padding: 0.5rem;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.ready-text {
+    font-size: 1.5rem;
+    color: #4f4f4f;
+}
+
+.generation-editor {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.editor-footer {
+    display: flex;
+    flex-direction: row;
+}
+
+.editor-header {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: 5rem;
+    justify-content: space-between;
+    padding-right: 1rem;
+    color: #999;
+}
+
+.big-icon {
+    display: inline-block;
+    color: #bbb;
 }

@@ -9,11 +9,12 @@ import {
     Checkbox,
     Switch,
     FormControl,
-    Divider,
+    FormControlLabel,
 } from "@mui/material"
 import { getState } from "../store"
 import DeleteIcon from "@mui/icons-material/Delete"
 import isNil from "lodash.isnil"
+import { HourglassBottom, DoneOutline, FmdBad } from "@mui/icons-material"
 
 export default function GenerationEditor({ gTask }) {
     const [canvasProps, setCanvasProps] = useState({
@@ -48,6 +49,7 @@ export default function GenerationEditor({ gTask }) {
     }, [gTask])
 
     const updateGTask = (prop, val) => {
+        console.log("update g", prop, val)
         getState().updateItem({ ...gTask, [prop]: val })
     }
 
@@ -55,244 +57,292 @@ export default function GenerationEditor({ gTask }) {
         return getPlaceholder()
     } else {
         return (
-            <Box
-                component="form"
-                noValidate
-                autoComplete="off"
-                sx={{
-                    padding: "1rem",
-                    boxSizing: "border-box",
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "stretch",
-                }}
-            >
-                <div
-                    style={{
-                        paddingRight: "1rem",
-                        flexGrow: "1",
+            <div className="generation-editor">
+                <div className="editor-header">
+                    <div>
+                        {gTask?.ready ? (
+                            <DoneOutline
+                                sx={{ fontSize: "4rem", ml: "1rem" }}
+                                className="big-icon"
+                            />
+                        ) : (
+                            <FmdBad
+                                sx={{ fontSize: "4rem" }}
+                                className="big-icon"
+                            />
+                        )}
+                        <div
+                            style={{
+                                display: "inline-flex",
+                                flexDirection: "column",
+                                justifyContent: "flex-end",
+                            }}
+                        >
+                            {gTask?.ready ? "Ready." : "Not ready yet."}
+                        </div>
+                    </div>
+                    <h4>{"id: " + gTask?.id}</h4>
+                </div>
+                <Box
+                    component="form"
+                    noValidate
+                    autoComplete="off"
+                    sx={{
+                        padding: "1rem",
+                        pt: "0",
+                        boxSizing: "border-box",
+                        width: "100%",
+                        height: "100%",
                         display: "flex",
-                        flexDirection: "column",
-                        alignItems: "stretch",
-                        justifyContent: "space-between",
+                        flexDirection: "row",
+                        justifyContent: "stretch",
                     }}
                 >
                     <div
                         style={{
+                            paddingRight: "1rem",
+                            flexGrow: "1",
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "stretch",
+                            justifyContent: "space-between",
                         }}
                     >
-                        {getArgCustomizer("prompt", gTask)}
-                        <TextField
-                            sx={{ mb: "2rem" }}
-                            className="genq-basic-input"
-                            multiline
-                            rows={6}
-                            aria-label="prompt"
-                            placeholder="what would you like to generate?"
-                            variant="outlined"
-                            value={gTask.prompt}
-                            onChange={e => {
-                                getState().updateItem({
-                                    ...gTask,
-                                    prompt: e.target.value,
-                                })
-                            }}
-                        />
-
-                        {getArgCustomizer("width", gTask)}
-                        <FormControl
-                            sx={{
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                mb: "1rem",
-                            }}
-                        >
-                            <span
-                                style={{ marginRight: "1rem" }}
-                                className="aux-value-display"
-                            >
-                                {gTask.width}
-                            </span>
-                            <Slider
-                                min={256}
-                                max={1024}
-                                step={64}
-                                value={gTask.width}
-                                onChange={(e, val) =>
-                                    updateGTask("width", val as number)
-                                }
-                                marks
-                                valueLabelDisplay="auto"
-                                sx={{
-                                    display: "inline-block",
-                                    ml: "0.5rem",
-                                    flexGrow: 1,
-                                }}
-                            />
-                        </FormControl>
-
-                        {getArgCustomizer("height", gTask)}
-                        <FormControl
-                            sx={{
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                mb: "1rem",
-                            }}
-                        >
-                            <span
-                                style={{ marginRight: "1rem" }}
-                                className="aux-value-display"
-                            >
-                                {gTask.height}
-                            </span>
-                            <Slider
-                                min={256}
-                                max={1024}
-                                step={64}
-                                value={gTask.height}
-                                onChange={(e, val) =>
-                                    updateGTask("height", val as number)
-                                }
-                                marks
-                                valueLabelDisplay="auto"
-                                sx={{
-                                    display: "inline-block",
-                                    ml: "0.5rem",
-                                    flexGrow: 1,
-                                }}
-                            />
-                        </FormControl>
-
                         <div
                             style={{
                                 display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                marginBottom: "2rem",
+                                flexDirection: "column",
+                                alignItems: "stretch",
                             }}
                         >
-                            {getArgCustomizer("seed", gTask)}
+                            {getArgCustomizer("prompt", gTask)}
                             <TextField
-                                sx={{ ml: "1rem" }}
-                                inputProps={{
-                                    style: {
-                                        padding: "0.5rem",
-                                    },
-                                }}
+                                sx={{ mb: "2rem" }}
                                 className="genq-basic-input"
-                                onChange={e =>
-                                    updateGTask("seed", Number(e.target.value))
-                                }
-                                value={gTask?.seed}
+                                multiline
+                                rows={6}
+                                aria-label="prompt"
+                                placeholder="what would you like to generate?"
+                                variant="outlined"
+                                value={gTask.prompt}
+                                onChange={e => {
+                                    getState().updateItem({
+                                        ...gTask,
+                                        prompt: e.target.value,
+                                    })
+                                }}
+                            />
+
+                            {getArgCustomizer("width", gTask)}
+                            <FormControl
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    mb: "1rem",
+                                }}
+                            >
+                                <span
+                                    style={{ marginRight: "1rem" }}
+                                    className="aux-value-display"
+                                >
+                                    {gTask.width}
+                                </span>
+                                <Slider
+                                    min={256}
+                                    max={1024}
+                                    step={64}
+                                    value={gTask.width}
+                                    onChange={(e, val) =>
+                                        updateGTask("width", val as number)
+                                    }
+                                    marks
+                                    valueLabelDisplay="auto"
+                                    sx={{
+                                        display: "inline-block",
+                                        ml: "0.5rem",
+                                        flexGrow: 1,
+                                    }}
+                                />
+                            </FormControl>
+
+                            {getArgCustomizer("height", gTask)}
+                            <FormControl
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    mb: "1rem",
+                                }}
+                            >
+                                <span
+                                    style={{ marginRight: "1rem" }}
+                                    className="aux-value-display"
+                                >
+                                    {gTask.height}
+                                </span>
+                                <Slider
+                                    min={256}
+                                    max={1024}
+                                    step={64}
+                                    value={gTask.height}
+                                    onChange={(e, val) =>
+                                        updateGTask("height", val as number)
+                                    }
+                                    marks
+                                    valueLabelDisplay="auto"
+                                    sx={{
+                                        display: "inline-block",
+                                        ml: "0.5rem",
+                                        flexGrow: 1,
+                                    }}
+                                />
+                            </FormControl>
+
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    marginBottom: "2rem",
+                                }}
+                            >
+                                {getArgCustomizer("seed", gTask)}
+                                <TextField
+                                    sx={{ ml: "1rem" }}
+                                    inputProps={{
+                                        style: {
+                                            padding: "0.5rem",
+                                        },
+                                    }}
+                                    className="genq-basic-input"
+                                    onChange={e =>
+                                        updateGTask(
+                                            "seed",
+                                            Number(e.target.value)
+                                        )
+                                    }
+                                    value={gTask?.seed}
+                                />
+                            </div>
+
+                            <TextField
+                                sx={{ mb: "2rem" }}
+                                className="genq-basic-input"
+                                label="Command"
+                                rows={2}
+                                multiline
+                                aria-label="command"
+                                placeholder="enter command to execute, e.g. `python ~/sd/scripts/dream.py`"
+                                defaultValue=""
+                                variant="outlined"
+                            />
+                            <TextField
+                                className="genq-basic-input"
+                                label="Custom args"
+                                rows={4}
+                                multiline
+                                aria-label="args"
+                                placeholder="enter additional args you'd like to pass in, e.g. `--iterations 42`"
+                                defaultValue=""
+                                variant="outlined"
+                            />
+                            <TextField
+                                disabled
+                                className="aux-value-display"
+                                rows={4}
+                                multiline
+                                aria-label="auto-args"
+                                value={generatedArgs}
+                                placeholder="no generated args"
+                                variant="outlined"
                             />
                         </div>
-
-                        <TextField
-                            sx={{ mb: "2rem" }}
-                            className="genq-basic-input"
-                            label="Command"
-                            rows={2}
-                            multiline
-                            aria-label="command"
-                            placeholder="enter command to execute, e.g. `python ~/sd/scripts/dream.py`"
-                            defaultValue=""
-                            variant="outlined"
-                        />
-                        <TextField
-                            className="genq-basic-input"
-                            label="Custom args"
-                            rows={4}
-                            multiline
-                            aria-label="args"
-                            placeholder="enter additional args you'd like to pass in, e.g. `--iterations 42`"
-                            defaultValue=""
-                            variant="outlined"
-                        />
-                        <TextField
-                            disabled
-                            className="aux-value-display"
-                            rows={4}
-                            multiline
-                            aria-label="auto-args"
-                            value={generatedArgs}
-                            placeholder="no generated args"
-                            variant="outlined"
-                        />
+                        <div className="editor-footer">
+                            <div
+                                className="ready-container"
+                                style={{
+                                    backgroundColor: gTask.ready
+                                        ? "#94e4a8"
+                                        : "#ece572",
+                                }}
+                            >
+                                <span className="ready-text">Ready?</span>
+                                <Switch
+                                    onChange={(e, val) =>
+                                        updateGTask("ready", val)
+                                    }
+                                    color="primary"
+                                />
+                            </div>
+                            <Button
+                                sx={{ ml: "1rem" }}
+                                endIcon={<DeleteIcon />}
+                                variant="outlined"
+                                onClick={e => {
+                                    getState().removeFromQueue(gTask.id)
+                                }}
+                            >
+                                Delete
+                            </Button>
+                        </div>
                     </div>
-                    <div>
-                        <Button
-                            endIcon={<DeleteIcon />}
-                            variant="outlined"
-                            onClick={e => {
-                                getState().removeFromQueue(gTask.id)
+                    <div style={{ flexGrow: "1" }}>
+                        {getArgCustomizer(
+                            "initImage",
+                            gTask,
+                            "Initialization image"
+                        )}
+                        <div
+                            style={{
+                                border: "1px dashed gray",
+                                borderRadius: "5px",
+                                marginBottom: "0.5rem",
                             }}
                         >
-                            Delete
-                        </Button>
-                    </div>
-                </div>
-                <div style={{ flexGrow: "1" }}>
-                    {getArgCustomizer(
-                        "initImage",
-                        gTask,
-                        "Initialization image"
-                    )}
-                    <div
-                        style={{
-                            border: "1px dashed gray",
-                            borderRadius: "5px",
-                            marginBottom: "0.5rem",
-                        }}
-                    >
-                        <ReactSketchCanvas
-                            width="600"
-                            height="400"
-                            {...canvasProps}
+                            <ReactSketchCanvas
+                                width="600"
+                                height="400"
+                                {...canvasProps}
+                            />
+                        </div>
+                        <input
+                            type="color"
+                            value={canvasProps.strokeColor}
+                            onChange={e =>
+                                setCanvasProps({
+                                    ...canvasProps,
+                                    strokeColor: e.target.value,
+                                })
+                            }
+                        ></input>
+                        <input
+                            type="color"
+                            value={canvasProps.canvasColor}
+                            onChange={e =>
+                                setCanvasProps({
+                                    ...canvasProps,
+                                    canvasColor: e.target.value,
+                                })
+                            }
+                        ></input>
+                        <Slider
+                            sx={{ display: "inline-block" }}
+                            aria-label="Volume"
+                            value={canvasProps.strokeWidth}
+                            defaultValue={4}
+                            min={1}
+                            max={42}
+                            onChange={(even, newValue) =>
+                                setCanvasProps({
+                                    ...canvasProps,
+                                    strokeWidth: newValue as number,
+                                })
+                            }
                         />
                     </div>
-                    <input
-                        type="color"
-                        value={canvasProps.strokeColor}
-                        onChange={e =>
-                            setCanvasProps({
-                                ...canvasProps,
-                                strokeColor: e.target.value,
-                            })
-                        }
-                    ></input>
-                    <input
-                        type="color"
-                        value={canvasProps.canvasColor}
-                        onChange={e =>
-                            setCanvasProps({
-                                ...canvasProps,
-                                canvasColor: e.target.value,
-                            })
-                        }
-                    ></input>
-                    <Slider
-                        sx={{ display: "inline-block" }}
-                        aria-label="Volume"
-                        value={canvasProps.strokeWidth}
-                        defaultValue={4}
-                        min={1}
-                        max={42}
-                        onChange={(even, newValue) =>
-                            setCanvasProps({
-                                ...canvasProps,
-                                strokeWidth: newValue as number,
-                            })
-                        }
-                    />
-                </div>
-            </Box>
+                </Box>
+            </div>
         )
     }
 }

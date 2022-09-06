@@ -31,10 +31,11 @@ export default function QueueItem({
                     {...provided.dragHandleProps}
                     className={
                         "queue-item " +
-                        (snapshot.isDragging ? "dragging-queue-item" : "") +
+                        (snapshot.isDragging ? " dragging-queue-item" : "") +
                         (getState().selectedTaskId === item.id
-                            ? "selected"
-                            : "")
+                            ? " selected"
+                            : "") +
+                        (item.ready ? "" : " not-ready")
                     }
                 >
                     <div className="prompt-text-preview">
