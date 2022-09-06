@@ -1,3 +1,5 @@
+$left-column-width: 19rem;
+
 html {
     font-size: 14px;
     line-height: 14px;
@@ -28,7 +30,7 @@ body {
 .everything-above-status {
     position: relative;
     display: grid;
-    grid-template-columns: 19rem 1fr;
+    grid-template-columns: $left-column-width 1fr;
     min-height: 0;
     min-width: 0;
 }
@@ -42,7 +44,7 @@ body {
     align-items: stretch;
     border-right: 2px solid #9ca3ac;
     min-height: 0;
-    min-width: 19rem;
+    min-width: $left-column-width;
     overflow-y: scroll;
 }
 
@@ -57,7 +59,7 @@ body {
 
 .main-area {
     position: absolute;
-    left: 19rem;
+    left: $left-column-width;
     right: 0;
     bottom: 0;
     top: 0;
@@ -75,9 +77,25 @@ body {
 }
 
 .queue-item {
-    width: 18rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: stretch;
+    width: calc($left-column-width - 1rem);
+    max-width: calc($left-column-width - 1rem);
     margin: 0.5rem;
-    margin-bottom: 0.75rem;
+}
+
+.queue-item-index {
+    font-size: 1.5rem;
+    color: #aaa;
+    padding: 0.5rem;
+    padding-left: 0;
+}
+
+.queue-item-body {
+    flex-grow: 1;
+    min-width: 0;
     // background-color: #b9cbd8;
     background-color: #b9cbd844;
     border: 1px solid #a9bbc8;

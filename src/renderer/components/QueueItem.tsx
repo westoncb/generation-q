@@ -19,27 +19,32 @@ export default function QueueItem({
             key={item.id}
         >
             {(provided, snapshot) => (
-                <div
-                    onClick={e => {
-                        console.log("got the click", e)
-                        setState({ selectedTaskId: item.id })
-                        e.stopPropagation()
-                    }}
-                    tabIndex={"-1"}
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    className={
-                        "queue-item " +
-                        (snapshot.isDragging ? " dragging-queue-item" : "") +
-                        (getState().selectedTaskId === item.id
-                            ? " selected"
-                            : "") +
-                        (item.ready ? "" : " not-ready")
-                    }
-                >
-                    <div className="prompt-text-preview">
-                        {getDisplayText(item)}
+                <div className="queue-item">
+                    <div className="queue-item-index">{index + 1}</div>
+                    <div
+                        onClick={e => {
+                            console.log("got the click", e)
+                            setState({ selectedTaskId: item.id })
+                            e.stopPropagation()
+                        }}
+                        tabIndex={"-1"}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className={
+                            "queue-item-body " +
+                            (snapshot.isDragging
+                                ? " dragging-queue-item"
+                                : "") +
+                            (getState().selectedTaskId === item.id
+                                ? " selected"
+                                : "") +
+                            (item.ready ? "" : " not-ready")
+                        }
+                    >
+                        <div className="prompt-text-preview">
+                            {getDisplayText(item)}
+                        </div>
                     </div>
                 </div>
             )}
