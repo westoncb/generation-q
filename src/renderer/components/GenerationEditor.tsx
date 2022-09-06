@@ -9,12 +9,11 @@ import {
     Checkbox,
     Switch,
     FormControl,
-    FormControlLabel,
 } from "@mui/material"
 import { getState } from "../store"
 import DeleteIcon from "@mui/icons-material/Delete"
 import isNil from "lodash.isnil"
-import { HourglassBottom, DoneOutline, FmdBad } from "@mui/icons-material"
+import { DoneOutline, FmdBad } from "@mui/icons-material"
 
 export default function GenerationEditor({ gTask }) {
     const [canvasProps, setCanvasProps] = useState({
@@ -24,7 +23,7 @@ export default function GenerationEditor({ gTask }) {
         preserveBackgroundImageAspectRatio: "none",
         strokeWidth: 4,
         strokeColor: "#000000",
-        canvasColor: "#d5e2de",
+        canvasColor: "#f4ebd7",
         style: { borderRight: "0" },
         exportWithBackgroundImage: true,
     })
@@ -120,7 +119,7 @@ export default function GenerationEditor({ gTask }) {
                                 sx={{ mb: "2rem" }}
                                 className="genq-basic-input"
                                 multiline
-                                rows={6}
+                                rows={4}
                                 aria-label="prompt"
                                 placeholder="what would you like to generate?"
                                 variant="outlined"
@@ -240,7 +239,7 @@ export default function GenerationEditor({ gTask }) {
                             <TextField
                                 className="genq-basic-input"
                                 label="Custom args"
-                                rows={4}
+                                rows={3}
                                 multiline
                                 aria-label="args"
                                 placeholder="enter additional args you'd like to pass in, e.g. `--iterations 42`"
@@ -250,7 +249,7 @@ export default function GenerationEditor({ gTask }) {
                             <TextField
                                 disabled
                                 className="aux-value-display"
-                                rows={4}
+                                rows={3}
                                 multiline
                                 aria-label="auto-args"
                                 value={generatedArgs}
@@ -307,40 +306,54 @@ export default function GenerationEditor({ gTask }) {
                                 {...canvasProps}
                             />
                         </div>
-                        <input
-                            type="color"
-                            value={canvasProps.strokeColor}
-                            onChange={e =>
-                                setCanvasProps({
-                                    ...canvasProps,
-                                    strokeColor: e.target.value,
-                                })
-                            }
-                        ></input>
-                        <input
-                            type="color"
-                            value={canvasProps.canvasColor}
-                            onChange={e =>
-                                setCanvasProps({
-                                    ...canvasProps,
-                                    canvasColor: e.target.value,
-                                })
-                            }
-                        ></input>
-                        <Slider
-                            sx={{ display: "inline-block" }}
-                            aria-label="Volume"
-                            value={canvasProps.strokeWidth}
-                            defaultValue={4}
-                            min={1}
-                            max={42}
-                            onChange={(even, newValue) =>
-                                setCanvasProps({
-                                    ...canvasProps,
-                                    strokeWidth: newValue as number,
-                                })
-                            }
-                        />
+                        <div className="paint-controls">
+                            <input
+                                type="color"
+                                value={canvasProps.strokeColor}
+                                onChange={e =>
+                                    setCanvasProps({
+                                        ...canvasProps,
+                                        strokeColor: e.target.value,
+                                    })
+                                }
+                            ></input>
+                            <input
+                                type="color"
+                                value={canvasProps.canvasColor}
+                                onChange={e =>
+                                    setCanvasProps({
+                                        ...canvasProps,
+                                        canvasColor: e.target.value,
+                                    })
+                                }
+                            ></input>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    flexGrow: 1,
+                                    marginLeft: "1rem",
+                                }}
+                            >
+                                <Slider
+                                    sx={{ display: "inline-block" }}
+                                    aria-label="stroke-width"
+                                    value={canvasProps.strokeWidth}
+                                    defaultValue={4}
+                                    min={1}
+                                    max={42}
+                                    onChange={(even, newValue) =>
+                                        setCanvasProps({
+                                            ...canvasProps,
+                                            strokeWidth: newValue as number,
+                                        })
+                                    }
+                                />
+                                <InputLabel>
+                                    Stroke width: {canvasProps.strokeWidth}
+                                </InputLabel>
+                            </div>
+                        </div>
                     </div>
                 </Box>
             </div>
