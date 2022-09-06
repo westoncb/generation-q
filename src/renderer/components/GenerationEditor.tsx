@@ -21,6 +21,7 @@ export default function GenerationEditor({ gTask }) {
         width: "100%",
         height: "500px",
         preserveBackgroundImageAspectRatio: "none",
+        backgroundImage: "",
         strokeWidth: 4,
         strokeColor: "#000000",
         canvasColor: "#f4ebd7",
@@ -29,6 +30,9 @@ export default function GenerationEditor({ gTask }) {
     })
 
     const [generatedArgs, setGeneratedArgs] = useState("")
+    const [imgFile, setImgFile] = useState(null)
+    const [extraCanvasClass, setExtraCanvasClass] = useState("")
+    const [exportPath, setExportPath] = useState("")
 
     useEffect(() => {
         if (!isNil(gTask?.specialArgs)) {
@@ -36,16 +40,18 @@ export default function GenerationEditor({ gTask }) {
                 (
                     result: string,
                     [key, curArg]: [string, { enabled: boolean; param: string }]
-                ) =>
-                    result +
-                    (curArg.enabled
-                        ? `${curArg.param}${gTask[key]}` + " "
-                        : ""),
+                ) => {
+                    const value = key === "initImage" ? exportPath : gTask[key]
+                    return (
+                        result +
+                        (curArg.enabled ? `${curArg.param}${value}` + " " : "")
+                    )
+                },
                 ""
             )
             setGeneratedArgs(argString)
         }
-    }, [gTask])
+    }, [gTask, exportPath])
 
     const updateGTask = (prop, val) => {
         console.log("update g", prop, val)
@@ -229,6 +235,7 @@ export default function GenerationEditor({ gTask }) {
                                 sx={{ mb: "2rem" }}
                                 className="genq-basic-input"
                                 label="Command"
+                                spellCheck={false}
                                 rows={2}
                                 multiline
                                 aria-label="command"
@@ -239,6 +246,7 @@ export default function GenerationEditor({ gTask }) {
                             <TextField
                                 className="genq-basic-input"
                                 label="Custom args"
+                                spellCheck={false}
                                 rows={3}
                                 multiline
                                 aria-label="args"
@@ -299,6 +307,41 @@ export default function GenerationEditor({ gTask }) {
                                 borderRadius: "5px",
                                 marginBottom: "0.5rem",
                             }}
+                            className={extraCanvasClass}
+                            tabIndex={0}
+                            onDragOver={e => {
+                                e.preventDefault()
+                            }}
+                            onDragEnter={e => {
+                                setExtraCanvasClass("file-hover")
+                            }}
+                            onDragLeave={e => {
+                                setExtraCanvasClass("")
+                            }}
+                            onDrop={ev => {
+                                ev.preventDefault()
+                                setExtraCanvasClass("")
+
+                                if (ev.dataTransfer.items) {
+                                    // Use DataTransferItemList interface to access the file(s)
+                                    ;[...ev.dataTransfer.items].forEach(
+                                        (item, i) => {
+                                            // If dropped items aren't files, reject them
+                                            if (item.kind === "file") {
+                                                const file = item.getAsFile()
+                                                setImgFile(file)
+                                                setCanvasProps({
+                                                    ...canvasProps,
+                                                    backgroundImage:
+                                                        URL.createObjectURL(
+                                                            file
+                                                        ),
+                                                })
+                                            }
+                                        }
+                                    )
+                                }
+                            }}
                         >
                             <ReactSketchCanvas
                                 width="600"
@@ -353,6 +396,50 @@ export default function GenerationEditor({ gTask }) {
                                     Stroke width: {canvasProps.strokeWidth}
                                 </InputLabel>
                             </div>
+                        </div>
+                        {/* <div style={{ marginTop: "1rem" }}>
+                            <FileUploader
+                                multiple={false}
+                                handleChange={file => {
+                                    setImgFile(file)
+                                    setCanvasProps({
+                                        ...canvasProps,
+                                        backgroundImage:
+                                            URL.createObjectURL(file),
+                                    })
+                                }}
+                                name="file"
+                                types={["png", "jpg", "jpeg", "gif"]}
+                            />
+                        </div> */}
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
+                                flexGrow: 1,
+                                marginTop: "1rem",
+                            }}
+                        >
+                            <TextField
+                                inputProps={{
+                                    style: {
+                                        padding: "0.5rem",
+                                    },
+                                }}
+                                sx={{ flexGrow: 1, pr: "1rem" }}
+                                size="small"
+                                label="Export path"
+                                value={exportPath}
+                                spellCheck={false}
+                                onChange={e => setExportPath(e.target.value)}
+                            />
+                            <Button
+                                className="primary-button"
+                                variant="contained"
+                            >
+                                Export image
+                            </Button>
                         </div>
                     </div>
                 </Box>
@@ -414,16 +501,6 @@ function getArgCustomizer(paramName, gTask, label?: string) {
             />
         </div>
     )
-}
-
-function getDimensionMarks(count, increment, base) {
-    const marks = []
-    for (let i = 0; i < count; i++) {
-        const value = base + increment * i
-        marks.push({ value, label: value })
-    }
-
-    return marks
 }
 
 function getPlaceholder() {

@@ -3,6 +3,7 @@ import { Draggable } from "react-beautiful-dnd"
 import GenerationTask from "@src/generationTask"
 import isEmpty from "lodash.isempty"
 import { getState, setState } from "../store"
+import { DoneOutline, FmdBad } from "@mui/icons-material"
 
 export default function QueueItem({
     item,
@@ -23,7 +24,6 @@ export default function QueueItem({
                     <div className="queue-item-index">{index + 1}</div>
                     <div
                         onClick={e => {
-                            console.log("got the click", e)
                             setState({ selectedTaskId: item.id })
                             e.stopPropagation()
                         }}
@@ -42,8 +42,26 @@ export default function QueueItem({
                             (item.ready ? "" : " not-ready")
                         }
                     >
-                        <div className="prompt-text-preview">
-                            {getDisplayText(item)}
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
+                            }}
+                        >
+                            {item.ready ? (
+                                <DoneOutline
+                                    sx={{ fontSize: "1rem", mr: "0.5rem" }}
+                                />
+                            ) : (
+                                <FmdBad
+                                    sx={{ fontSize: "1rem", mr: "0.5rem" }}
+                                />
+                            )}
+
+                            <div className="prompt-text-preview">
+                                {getDisplayText(item)}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -52,9 +70,12 @@ export default function QueueItem({
     )
 }
 
+const MAX_CHARS = 100
 function getDisplayText(item) {
     if (!isEmpty(item.prompt)) {
-        return item.prompt
+        const charCount = Math.min(MAX_CHARS, item.prompt.length)
+        const suffix = charCount < item.prompt.length ? "..." : ""
+        return item.prompt.slice(0, charCount) + suffix
     } else {
         return <i style={{ color: "#666" }}>empty prompt</i>
     }

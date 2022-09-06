@@ -12,10 +12,17 @@ import { setState, getState, useStore } from "../store"
 import GenerationEditor from "./GenerationEditor"
 import GenerationTask from "@src/generationTask"
 import shallow from "zustand/shallow"
+import { createTheme, Theme, ThemeProvider } from "@mui/material/styles"
 
 const GENERATION_EDITOR = 0
 const COMPLETED_GENERATIONS = 1
 const GALLERY = 2
+
+const theme = createTheme({
+    palette: {
+        primary: { main: "#7a87cc" },
+    },
+})
 
 export default function Application() {
     const { queue, selectedTaskId } = useStore(
@@ -29,53 +36,58 @@ export default function Application() {
     }
 
     return (
-        <div className="application">
-            <div className="everything-above-status">
-                <div className="main-left-column">
-                    <Button
-                        className="primary-button"
-                        sx={{ margin: "0.5rem" }}
-                        variant="contained"
-                        endIcon={<AddIcon />}
-                        onClick={e => {
-                            const newTask = new GenerationTask("")
-                            setState({ selectedTaskId: newTask.id })
-                            getState().addToQueue(newTask)
-                        }}
-                    >
-                        New Generation
-                    </Button>
-                    <Queue items={queue} />
-                </div>
-                <div className="main-area">
-                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                        <Tabs
-                            value={tabIndex}
-                            onChange={handleTabChange}
-                            aria-label="basic tabs example"
+        <ThemeProvider theme={theme}>
+            <div className="application">
+                <div className="everything-above-status">
+                    <div className="main-left-column">
+                        <Button
+                            className="primary-button"
+                            sx={{ margin: "0.5rem" }}
+                            variant="contained"
+                            endIcon={<AddIcon />}
+                            onClick={e => {
+                                const newTask = new GenerationTask("")
+                                setState({ selectedTaskId: newTask.id })
+                                getState().addToQueue(newTask)
+                            }}
                         >
-                            <Tab label="Generation Editor" {...a11yProps(0)} />
-                            <Tab
-                                label="Completed Generations"
-                                {...a11yProps(1)}
+                            New Generation
+                        </Button>
+                        <Queue items={queue} />
+                    </div>
+                    <div className="main-area">
+                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                            <Tabs
+                                value={tabIndex}
+                                onChange={handleTabChange}
+                                aria-label="basic tabs example"
+                            >
+                                <Tab
+                                    label="Generation Editor"
+                                    {...a11yProps(0)}
+                                />
+                                <Tab
+                                    label="Completed Generations"
+                                    {...a11yProps(1)}
+                                />
+                                <Tab label="Gallery" {...a11yProps(2)} />
+                            </Tabs>
+                        </Box>
+                        <TabPanel value={tabIndex} index={GENERATION_EDITOR}>
+                            <GenerationEditor
+                                gTask={getState().getTask(selectedTaskId)}
                             />
-                            <Tab label="Gallery" {...a11yProps(2)} />
-                        </Tabs>
-                    </Box>
-                    <TabPanel value={tabIndex} index={GENERATION_EDITOR}>
-                        <GenerationEditor
-                            gTask={getState().getTask(selectedTaskId)}
-                        />
-                    </TabPanel>
-                    <TabPanel
-                        value={tabIndex}
-                        index={COMPLETED_GENERATIONS}
-                    ></TabPanel>
-                    <TabPanel value={tabIndex} index={GALLERY}></TabPanel>
+                        </TabPanel>
+                        <TabPanel
+                            value={tabIndex}
+                            index={COMPLETED_GENERATIONS}
+                        ></TabPanel>
+                        <TabPanel value={tabIndex} index={GALLERY}></TabPanel>
+                    </div>
                 </div>
+                <StatusRegion />
             </div>
-            <StatusRegion />
-        </div>
+        </ThemeProvider>
     )
 }
 

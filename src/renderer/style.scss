@@ -1,4 +1,5 @@
 $left-column-width: 19rem;
+$selection-green: #70d2af;
 
 html {
     font-size: 14px;
@@ -94,12 +95,15 @@ body {
 }
 
 .queue-item-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     flex-grow: 1;
     min-width: 0;
-    // background-color: #b9cbd8;
+    min-height: 4rem;
     background-color: #b9cbd844;
     border: 1px solid #a9bbc8;
-    padding: 1rem;
+    padding: 0.5rem;
     border-radius: 5px;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.125);
     box-sizing: border-box;
@@ -115,7 +119,7 @@ body {
 }
 
 .selected {
-    outline: 4px dashed #70d2af;
+    outline: 4px dashed $selection-green;
     background-color: #b9d2d8;
     // &:hover {
     //     background-color: #d9fbf8;
@@ -128,9 +132,6 @@ body {
 
 .prompt-text-preview {
     font-size: 0.8rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
 }
 
 .primary-button {
@@ -145,11 +146,7 @@ body {
     overflow-y: scroll;
     // dot pattern
     background-size: 12px 12px;
-    background-image: radial-gradient(
-        circle,
-        #bbccee 1px,
-        rgba(0, 0, 0, 0) 1px
-    );
+    background-image: radial-gradient(circle, #cde 1px, rgba(0, 0, 0, 0) 1px);
 }
 
 .genq-basic-input {
@@ -208,8 +205,16 @@ body {
     display: inline-block;
     color: #bbb;
 }
+.big-icon {
+    display: inline-block;
+    color: #bbb;
+}
 
 .paint-controls {
     display: flex;
     flex-direction: row;
+}
+
+.file-hover {
+    outline: 4px dashed $selection-green;
 }
