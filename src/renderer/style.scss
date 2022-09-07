@@ -111,6 +111,7 @@ body {
     &:hover {
         background-color: #b9d2d8;
     }
+    transition: background-color 120ms;
 }
 
 .not-ready {
@@ -217,4 +218,12 @@ body {
 
 .file-hover {
     outline: 4px dashed $selection-green;
+}
+
+.grouping-capsule {
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
 }
