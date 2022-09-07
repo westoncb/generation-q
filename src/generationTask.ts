@@ -3,7 +3,6 @@ import { nanoid } from "nanoid"
 export default class GenerationTask {
     id: string
     command: string
-    args: string
     prompt: string
     width: number
     height: number
@@ -13,12 +12,13 @@ export default class GenerationTask {
     ready: boolean
     canvasData: { bgImgObjURL: string; paths: Record<string, unknown>[] }
     initImgExportPath: string
+    customArgs: string
 
-    constructor(prompt: string, command: string = "", args: string = "") {
+    constructor(prompt: string) {
         this.id = nanoid()
         this.prompt = prompt
-        this.command = command
-        this.args = args
+        this.command = ""
+        this.customArgs = ""
         this.width = 512
         this.height = 512
         this.seed = Math.floor(Math.random() * 10000)
@@ -33,5 +33,26 @@ export default class GenerationTask {
         this.ready = false
         this.canvasData = { bgImgObjURL: "", paths: [] }
         this.initImgExportPath = ""
+        this.command = ""
+        this.customArgs = ""
+    }
+
+    getGeneratedArgs(): string {
+        const argString = Object.entries(this.specialArgs).reduce(
+            (
+                result: string,
+                [key, curArg]: [string, { enabled: boolean; param: string }]
+            ) => {
+                const value =
+                    key === "initImage" ? this.initImgExportPath : this[key]
+                return (
+                    result +
+                    (curArg.enabled ? `${curArg.param}${value}` + " " : "")
+                )
+            },
+            ""
+        )
+
+        return argString
     }
 }

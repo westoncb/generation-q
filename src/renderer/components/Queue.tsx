@@ -14,15 +14,13 @@ export default function Queue({ items }: QueueProps) {
         // dropped outside the list
         if (!destination) return
 
-        const newItems = reorder(items, source.index, destination.index)
+        const newItems = reorder<GenerationTask>(
+            items,
+            source.index,
+            destination.index
+        )
 
-        console.log(newItems)
-        // Create a new array here!
-        const newItemSequence = newItems.map((el, index) => ({
-            ...el,
-        }))
-
-        setState({ queue: newItemSequence })
+        setState({ queue: newItems })
     }
     return (
         <Box

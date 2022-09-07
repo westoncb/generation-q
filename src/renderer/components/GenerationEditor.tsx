@@ -22,7 +22,7 @@ export default function GenerationEditor({ gTask }) {
         height: "500px",
         preserveBackgroundImageAspectRatio: "none",
         backgroundImage: "",
-        strokeWidth: 4,
+        strokeWidth: 16,
         strokeColor: "#000000",
         canvasColor: "#f4ebd7",
         style: { borderRight: "0" },
@@ -36,23 +36,7 @@ export default function GenerationEditor({ gTask }) {
     useEffect(() => {
         // Compute and store generated args
         if (!isNil(gTask?.specialArgs)) {
-            const argString = Object.entries(gTask.specialArgs).reduce(
-                (
-                    result: string,
-                    [key, curArg]: [string, { enabled: boolean; param: string }]
-                ) => {
-                    const value =
-                        key === "initImage"
-                            ? gTask.initImgExportPath
-                            : gTask[key]
-                    return (
-                        result +
-                        (curArg.enabled ? `${curArg.param}${value}` + " " : "")
-                    )
-                },
-                ""
-            )
-            setGeneratedArgs(argString)
+            setGeneratedArgs(gTask.getGeneratedArgs())
         }
 
         canvasProps.backgroundImage = gTask?.canvasData.bgImgObjUrl ?? ""
