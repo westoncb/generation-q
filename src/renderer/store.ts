@@ -39,7 +39,8 @@ const useStore = create<MainState>((set, get) => {
                 curItem => curItem.id === item.id
             )
             const newQueue = get().queue.slice()
-            newQueue[index] = item
+            newQueue[index] = new GenerationTask()
+            newQueue[index].copy(item)
             set({ queue: newQueue })
         },
         removeFromQueue: id => {

@@ -124,7 +124,7 @@ export default function GenerationEditor({ gTask }) {
                         >
                             {getArgCustomizer("prompt", gTask)}
                             <TextField
-                                sx={{ mb: "2rem" }}
+                                sx={{ mb: "1rem" }}
                                 className="genq-basic-input"
                                 multiline
                                 rows={4}
@@ -474,7 +474,9 @@ function getArgCustomizer(paramName, gTask, label?: string) {
                 alignItems: "center",
             }}
         >
-            <InputLabel sx={{ flexShrink: 0 }}>{label}</InputLabel>
+            <InputLabel sx={{ flexShrink: 0, width: "3.5rem" }}>
+                {label}
+            </InputLabel>
             <Checkbox
                 checked={gTask.specialArgs[paramName].enabled}
                 onChange={(e, val) => {

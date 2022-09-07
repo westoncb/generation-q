@@ -14,9 +14,9 @@ export default class GenerationTask {
     initImgExportPath: string
     customArgs: string
 
-    constructor(prompt: string) {
+    constructor(prompt?: string) {
         this.id = nanoid()
-        this.prompt = prompt
+        this.prompt = prompt ?? ""
         this.command = ""
         this.customArgs = ""
         this.width = 512
@@ -35,6 +35,10 @@ export default class GenerationTask {
         this.initImgExportPath = ""
         this.command = ""
         this.customArgs = ""
+    }
+
+    copy(gTask: GenerationTask) {
+        Object.entries(gTask).forEach(([key, val]) => (this[key] = val))
     }
 
     getGeneratedArgs(): string {
