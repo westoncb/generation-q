@@ -11,6 +11,8 @@ export default class GenerationTask {
     initImage: string
     specialArgs: Record<string, { enabled: boolean; param: string }>
     ready: boolean
+    canvasData: { bgImgObjURL: string; paths: Record<string, unknown>[] }
+    initImgExportPath: string
 
     constructor(prompt: string, command: string = "", args: string = "") {
         this.id = nanoid()
@@ -29,5 +31,7 @@ export default class GenerationTask {
             initImage: { enabled: false, param: "--init_img " },
         }
         this.ready = false
+        this.canvasData = { bgImgObjURL: "", paths: [] }
+        this.initImgExportPath = ""
     }
 }

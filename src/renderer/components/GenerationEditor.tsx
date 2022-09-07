@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { ReactSketchCanvas } from "react-sketch-canvas"
 import {
     InputLabel,
@@ -21,7 +21,7 @@ export default function GenerationEditor({ gTask }) {
         width: "100%",
         height: "500px",
         preserveBackgroundImageAspectRatio: "none",
-        backgroundImage: "",
+        backgroundImage: gTask?.canvasData.bgImgObjUrl ?? "",
         strokeWidth: 4,
         strokeColor: "#000000",
         canvasColor: "#f4ebd7",
@@ -30,18 +30,21 @@ export default function GenerationEditor({ gTask }) {
     })
 
     const [generatedArgs, setGeneratedArgs] = useState("")
-    const [imgFile, setImgFile] = useState(null)
-    const [extraCanvasClass, setExtraCanvasClass] = useState("")
-    const [exportPath, setExportPath] = useState("")
+    const [draggingOnCanvas, setDraggingOnCanvas] = useState(false)
+    const canvasRef = useRef(null)
 
     useEffect(() => {
+        // Compute and store generated args
         if (!isNil(gTask?.specialArgs)) {
             const argString = Object.entries(gTask.specialArgs).reduce(
                 (
                     result: string,
                     [key, curArg]: [string, { enabled: boolean; param: string }]
                 ) => {
-                    const value = key === "initImage" ? exportPath : gTask[key]
+                    const value =
+                        key === "initImage"
+                            ? gTask.initImgExportPath
+                            : gTask[key]
                     return (
                         result +
                         (curArg.enabled ? `${curArg.param}${value}` + " " : "")
@@ -51,10 +54,19 @@ export default function GenerationEditor({ gTask }) {
             )
             setGeneratedArgs(argString)
         }
-    }, [gTask, exportPath])
+    }, [gTask])
+
+    useLayoutEffect(() => {
+        if (!isNil(canvasRef.current) && !isNil(gTask.canvasData.paths)) {
+            canvasRef.current.clearCanvas()
+            canvasRef.current.loadPaths(gTask.canvasData.paths)
+        }
+
+        // For some reason the canvas ref (from ReactSketchCanvas) changes
+        // every time a stroke is complete, so this gets called a lot.
+    }, [canvasRef.current])
 
     const updateGTask = (prop, val) => {
-        console.log("update g", prop, val)
         getState().updateItem({ ...gTask, [prop]: val })
     }
 
@@ -307,20 +319,20 @@ export default function GenerationEditor({ gTask }) {
                                 borderRadius: "5px",
                                 marginBottom: "0.5rem",
                             }}
-                            className={extraCanvasClass}
+                            className={draggingOnCanvas ? "file-hover" : ""}
                             tabIndex={0}
                             onDragOver={e => {
                                 e.preventDefault()
                             }}
                             onDragEnter={e => {
-                                setExtraCanvasClass("file-hover")
+                                setDraggingOnCanvas(true)
                             }}
                             onDragLeave={e => {
-                                setExtraCanvasClass("")
+                                setDraggingOnCanvas(false)
                             }}
                             onDrop={ev => {
                                 ev.preventDefault()
-                                setExtraCanvasClass("")
+                                setDraggingOnCanvas(false)
 
                                 if (ev.dataTransfer.items) {
                                     // Use DataTransferItemList interface to access the file(s)
@@ -329,13 +341,16 @@ export default function GenerationEditor({ gTask }) {
                                             // If dropped items aren't files, reject them
                                             if (item.kind === "file") {
                                                 const file = item.getAsFile()
-                                                setImgFile(file)
+                                                const bgImgObjUrl =
+                                                    URL.createObjectURL(file)
+                                                updateGTask("canvasData", {
+                                                    ...gTask.canvasData,
+                                                    bgImgObjUrl,
+                                                })
                                                 setCanvasProps({
                                                     ...canvasProps,
                                                     backgroundImage:
-                                                        URL.createObjectURL(
-                                                            file
-                                                        ),
+                                                        bgImgObjUrl,
                                                 })
                                             }
                                         }
@@ -344,6 +359,17 @@ export default function GenerationEditor({ gTask }) {
                             }}
                         >
                             <ReactSketchCanvas
+                                ref={canvasRef}
+                                onStroke={e =>
+                                    canvasRef?.current
+                                        ?.exportPaths()
+                                        .then(paths => {
+                                            updateGTask("canvasData", {
+                                                ...gTask.canvasData,
+                                                paths,
+                                            })
+                                        })
+                                }
                                 width="600"
                                 height="400"
                                 {...canvasProps}
@@ -397,26 +423,11 @@ export default function GenerationEditor({ gTask }) {
                                 </InputLabel>
                             </div>
                         </div>
-                        {/* <div style={{ marginTop: "1rem" }}>
-                            <FileUploader
-                                multiple={false}
-                                handleChange={file => {
-                                    setImgFile(file)
-                                    setCanvasProps({
-                                        ...canvasProps,
-                                        backgroundImage:
-                                            URL.createObjectURL(file),
-                                    })
-                                }}
-                                name="file"
-                                types={["png", "jpg", "jpeg", "gif"]}
-                            />
-                        </div> */}
                         <div
                             style={{
                                 display: "flex",
                                 flexDirection: "row",
-                                alignItems: "center",
+                                alignItems: "stretch",
                                 flexGrow: 1,
                                 marginTop: "1rem",
                             }}
@@ -430,15 +441,20 @@ export default function GenerationEditor({ gTask }) {
                                 sx={{ flexGrow: 1, pr: "1rem" }}
                                 size="small"
                                 label="Export path"
-                                value={exportPath}
+                                value={gTask.initImgExportPath}
                                 spellCheck={false}
-                                onChange={e => setExportPath(e.target.value)}
+                                onChange={e =>
+                                    updateGTask(
+                                        "initImgExportPath",
+                                        e.target.value
+                                    )
+                                }
                             />
                             <Button
                                 className="primary-button"
                                 variant="contained"
                             >
-                                Export image
+                                Export init image
                             </Button>
                         </div>
                     </div>
