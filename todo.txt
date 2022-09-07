@@ -1,0 +1,19 @@
+track most recently used param names
+    - if any param name field is edited, update mostRecentParamNames in store
+    - whenever a new GenerationTask is constructed is takes its default param names from mostRecentParamNames
+
+implement queue processing behavior
+    - change .ready prop to .status
+    - "pop" next ready item; add finished items to "completed generations"
+    - show run status on queue items and in generation Editor
+        - show last line of console output + loading spinner
+    - disallow drag-and-drop for already executing tasks
+implement status bar
+    - show general app status: whether anything is running, number of completed generations, items in queue 
+    - show console output + expand/collapse
+implement "completed generations"
+implement Gallery
+
+finish up Generation Editor
+    - [maybe] add img path export / file-writing
+    - [maybe] sync canvas width/height to w/h args
