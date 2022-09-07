@@ -21,7 +21,7 @@ export default function GenerationEditor({ gTask }) {
         width: "100%",
         height: "500px",
         preserveBackgroundImageAspectRatio: "none",
-        backgroundImage: gTask?.canvasData.bgImgObjUrl ?? "",
+        backgroundImage: "",
         strokeWidth: 4,
         strokeColor: "#000000",
         canvasColor: "#f4ebd7",
@@ -54,12 +54,18 @@ export default function GenerationEditor({ gTask }) {
             )
             setGeneratedArgs(argString)
         }
+
+        canvasProps.backgroundImage = gTask?.canvasData.bgImgObjUrl ?? ""
     }, [gTask])
 
     useLayoutEffect(() => {
-        if (!isNil(canvasRef.current) && !isNil(gTask.canvasData.paths)) {
+        if (!isNil(canvasRef.current)) {
             canvasRef.current.clearCanvas()
-            canvasRef.current.loadPaths(gTask.canvasData.paths)
+
+            // Restore path data (would be lost during component unmount)
+            if (!isNil(gTask.canvasData.paths)) {
+                canvasRef.current.loadPaths(gTask.canvasData.paths)
+            }
         }
 
         // For some reason the canvas ref (from ReactSketchCanvas) changes
