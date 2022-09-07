@@ -24,7 +24,7 @@ export default function GenerationEditor({ gTask }) {
         backgroundImage: "",
         strokeWidth: 16,
         strokeColor: "#000000",
-        canvasColor: "#f4eee1",
+        canvasColor: "#ccd4e0",
         style: { borderRight: "0" },
         exportWithBackgroundImage: true,
     })
@@ -435,7 +435,7 @@ export default function GenerationEditor({ gTask }) {
                                     },
                                 }}
                                 className="genq-basic-input"
-                                sx={{ flexGrow: 1, pr: "1rem" }}
+                                sx={{ flexGrow: 1, mr: "1rem" }}
                                 size="small"
                                 label="Export path"
                                 value={gTask.initImgExportPath}

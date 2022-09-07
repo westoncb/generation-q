@@ -147,7 +147,11 @@ body {
     overflow-y: scroll;
     // dot pattern
     background-size: 12px 12px;
-    background-image: radial-gradient(circle, #cde 1px, rgba(0, 0, 0, 0) 1px);
+    background-image: radial-gradient(
+        circle,
+        #dedede 1px,
+        rgba(0, 0, 0, 0) 1px
+    );
 }
 
 .genq-basic-input {
