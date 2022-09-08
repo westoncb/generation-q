@@ -25,7 +25,13 @@ export function createAppWindow(): BrowserWindow {
             contextIsolation: true,
             nodeIntegrationInWorker: false,
             nodeIntegrationInSubFrames: false,
-            preload: APP_WINDOW_PRELOAD_WEBPACK_ENTRY,
+
+            // It seems like this might be needed by Electron Forge,
+            // but we need a custom preload script too, so not sure
+            // how both can be present and haven't spotted any
+            // issues doing it this way so far
+            // preload: APP_WINDOW_PRELOAD_WEBPACK_ENTRY,
+            preload: path.join(__dirname, "../../src/preload.js"),
         },
     })
 

@@ -45,7 +45,19 @@ export default function Application() {
                             sx={{ margin: "0.5rem" }}
                             variant="contained"
                             endIcon={<AddIcon />}
-                            onClick={e => {
+                            onClick={async e => {
+                                try {
+                                    const result =
+                                        // @ts-ignore: electronAPI is on the window
+                                        await window.electronAPI.sendNextGenerationTask(
+                                            {
+                                                prop: "this is the task",
+                                            }
+                                        )
+                                    console.log("GOT the result", result)
+                                } catch (e) {
+                                    console.log("error!", e)
+                                }
                                 const newTask = new GenerationTask("")
                                 setState({ selectedTaskId: newTask.id })
                                 getState().addToQueue(newTask)

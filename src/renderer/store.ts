@@ -1,6 +1,18 @@
 import GenerationTask from "@src/generationTask"
 import create from "zustand"
 
+setInterval(queueProcessorTick, 500)
+
+function queueProcessorTick() {
+    // if there's no running item,
+    // grab the top of queue and start it running
+}
+
+// @ts-ignore: ts doesn't recognize window.electronAPI
+window.electronAPI.handleGenerationTaskProgress((event, info) => {
+    console.log("got update!", info)
+})
+
 const testData: GenerationTask[] = [
     new GenerationTask(
         `"The Doom marine riding a Yorp into the sunset, trending on artstation HQ"`
