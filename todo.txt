@@ -3,10 +3,15 @@ track most recently used param names
     - whenever a new GenerationTask is constructed is takes its default param names from mostRecentParamNames
 
 implement queue processing behavior
-    - "pop" next ready item; add finished items to "completed generations"
-    - show run status on queue items and in generation Editor
-        - show last line of console output + loading spinner
-    - disallow drag-and-drop for already executing tasks
+    - store running items separately
+    - running item visuals:
+        - green pulse
+        - gear anim icon
+        - last line of status
+    - running state for GenerationEditor
+        - darkened overlay to disable ui; backgrop blur
+        - "Generating:" + prompt text + "click to see terminal output"
+            - clicking that button expands status area to show terminal output
 implement status bar
     - show general app status: whether anything is running, number of completed generations, items in queue 
     - show console output + expand/collapse
