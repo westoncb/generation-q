@@ -8,14 +8,16 @@ import { statusIconForGtask } from "./Application"
 export default function QueueItem({
     item,
     index,
+    dragEnabled,
 }: {
     item: GenerationTask
     index: number
+    dragEnabled: boolean
 }) {
     return (
         <Draggable
-            disableInteractiveElementBlocking
             draggableId={`${item.id}`}
+            isDragDisabled={!dragEnabled}
             index={index}
             key={item.id}
         >

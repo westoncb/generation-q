@@ -85,6 +85,32 @@ body {
     width: calc($left-column-width - 1rem);
     max-width: calc($left-column-width - 1rem);
     margin: 0.5rem;
+    transition: transform 300ms;
+    transform-origin: top center;
+}
+
+.queue-item-exit {
+    transform: scale(1, 1);
+}
+
+.queue-item-exit-active {
+    transform: scale(1, 0);
+}
+
+.queue-item-enter {
+    transform: scale(1, 0);
+}
+
+.queue-item-enter-active {
+    transform: scale(1, 1);
+}
+
+.queue-item-appear {
+    transform: scale(1, 0);
+}
+
+.queue-item-appear-active {
+    transform: scale(1, 1);
 }
 
 .queue-item-index {

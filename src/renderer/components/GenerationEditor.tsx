@@ -272,22 +272,28 @@ export default function GenerationEditor({ gTask }) {
                                 className="status-container"
                                 style={{
                                     backgroundColor:
-                                        gTask.status === GTaskStatus.READY
+                                        gTask.status !== GTaskStatus.NOT_READY
                                             ? "#94e4a8"
                                             : "#ece572",
                                 }}
                             >
                                 <span className="status-text">Ready?</span>
                                 <Switch
-                                    checked={gTask.status === GTaskStatus.READY}
-                                    onChange={(e, isReady) =>
-                                        updateGTask(
-                                            "status",
-                                            isReady
-                                                ? GTaskStatus.READY
-                                                : GTaskStatus.NOT_READY
-                                        )
+                                    checked={
+                                        gTask.status !== GTaskStatus.NOT_READY
                                     }
+                                    onChange={(e, isReady) => {
+                                        if (
+                                            gTask.status !== GTaskStatus.RUNNING
+                                        ) {
+                                            updateGTask(
+                                                "status",
+                                                isReady
+                                                    ? GTaskStatus.READY
+                                                    : GTaskStatus.NOT_READY
+                                            )
+                                        }
+                                    }}
                                     color="primary"
                                 />
                             </div>

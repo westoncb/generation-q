@@ -4,18 +4,20 @@ import { Box } from "@mui/material"
 
 import { reorder } from "../../utils/helpers"
 import QueueItem from "./QueueItem"
-import GenerationTask from "@src/generationTask"
+import GenerationTask, { GTaskStatus } from "@src/generationTask"
 import { setState } from "../store"
+import { TransitionGroup } from "react-transition-group"
+import { CSSTransition } from "react-transition-group"
 
-type QueueProps = { items: GenerationTask[] }
+type QueueProps = { tasks: GenerationTask[] }
 
-export default function Queue({ items }: QueueProps) {
+export default function Queue({ tasks }: QueueProps) {
     const onDragEnd = ({ destination, source }: DropResult) => {
         // dropped outside the list
         if (!destination) return
 
         const newItems = reorder<GenerationTask>(
-            items,
+            tasks,
             source.index,
             destination.index
         )
@@ -32,13 +34,28 @@ export default function Queue({ items }: QueueProps) {
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                         >
-                            {items.map((item, index) => (
-                                <QueueItem
-                                    key={item.id}
-                                    item={item}
-                                    index={index}
-                                />
-                            ))}
+                            <TransitionGroup>
+                                {tasks.map((item, index) => (
+                                    <CSSTransition
+                                        key={item.id}
+                                        appear={true}
+                                        timeout={300}
+                                        classNames="queue-item"
+                                    >
+                                        <QueueItem
+                                            key={item.id}
+                                            item={item}
+                                            index={index}
+                                            dragEnabled={
+                                                item.status ===
+                                                    GTaskStatus.READY ||
+                                                item.status ===
+                                                    GTaskStatus.NOT_READY
+                                            }
+                                        />
+                                    </CSSTransition>
+                                ))}
+                            </TransitionGroup>
                             {provided.placeholder}
                         </div>
                     )}

@@ -62,7 +62,7 @@ export default function Application() {
                         >
                             New Generation
                         </Button>
-                        <Queue items={queue} />
+                        <Queue tasks={queue} />
                     </div>
                     <div className="main-area">
                         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
