@@ -13,6 +13,13 @@ import GenerationEditor from "./GenerationEditor"
 import GenerationTask from "@src/generationTask"
 import shallow from "zustand/shallow"
 import { createTheme, Theme, ThemeProvider } from "@mui/material/styles"
+import { GTaskStatus } from "@src/generationTask"
+import {
+    DoneOutline,
+    FmdBad,
+    DirectionsRun,
+    PsychologyAlt,
+} from "@mui/icons-material"
 
 const GENERATION_EDITOR = 0
 const COMPLETED_GENERATIONS = 1
@@ -130,5 +137,19 @@ function a11yProps(index: number) {
     return {
         id: `simple-tab-${index}`,
         "aria-controls": `simple-tabpanel-${index}`,
+    }
+}
+
+export function statusIconForGtask(status, styles) {
+    const additionalStyles = { display: "inline-block", color: "#bbb" }
+    switch (status) {
+        case GTaskStatus.NOT_READY:
+            return <FmdBad style={{ ...additionalStyles, ...styles }} />
+        case GTaskStatus.READY:
+            return <DoneOutline style={{ ...additionalStyles, ...styles }} />
+        case GTaskStatus.RUNNING:
+            return <DirectionsRun style={{ ...additionalStyles, ...styles }} />
+        default:
+            return <PsychologyAlt style={{ ...additionalStyles, ...styles }} />
     }
 }

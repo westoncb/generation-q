@@ -165,7 +165,7 @@ body {
     border: 1px solid #6663;
 }
 
-.ready-container {
+.status-container {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -176,7 +176,7 @@ body {
     padding-bottom: 0;
 }
 
-.ready-text {
+.status-text {
     font-size: 1rem;
     color: #4f4f4f;
 }
@@ -204,15 +204,6 @@ body {
     border-bottom: 1px solid #ccc;
     margin-bottom: 0.5rem;
     background-color: rgba(0, 0, 0, 0.05);
-}
-
-.big-icon {
-    display: inline-block;
-    color: #bbb;
-}
-.big-icon {
-    display: inline-block;
-    color: #bbb;
 }
 
 .paint-controls {

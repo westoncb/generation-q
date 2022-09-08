@@ -3,7 +3,6 @@ track most recently used param names
     - whenever a new GenerationTask is constructed is takes its default param names from mostRecentParamNames
 
 implement queue processing behavior
-    - change .ready prop to .status
     - "pop" next ready item; add finished items to "completed generations"
     - show run status on queue items and in generation Editor
         - show last line of console output + loading spinner

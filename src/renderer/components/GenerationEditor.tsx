@@ -13,7 +13,8 @@ import {
 import { getState } from "../store"
 import DeleteIcon from "@mui/icons-material/Delete"
 import isNil from "lodash.isnil"
-import { DoneOutline, FmdBad } from "@mui/icons-material"
+import { GTaskStatus } from "@src/generationTask"
+import { statusIconForGtask } from "./Application"
 
 export default function GenerationEditor({ gTask }) {
     const [canvasProps, setCanvasProps] = useState({
@@ -67,17 +68,10 @@ export default function GenerationEditor({ gTask }) {
             <div className="generation-editor">
                 <div className="editor-header">
                     <div>
-                        {gTask?.ready ? (
-                            <DoneOutline
-                                sx={{ fontSize: "4rem", ml: "1rem" }}
-                                className="big-icon"
-                            />
-                        ) : (
-                            <FmdBad
-                                sx={{ fontSize: "4rem" }}
-                                className="big-icon"
-                            />
-                        )}
+                        {statusIconForGtask(gTask?.status, {
+                            fontSize: "4rem",
+                            marginLeft: "1rem",
+                        })}
                         <div
                             style={{
                                 display: "inline-flex",
@@ -85,7 +79,9 @@ export default function GenerationEditor({ gTask }) {
                                 justifyContent: "flex-end",
                             }}
                         >
-                            {gTask?.ready ? "Ready." : "Not ready yet."}
+                            {gTask?.status === GTaskStatus.READY
+                                ? "Ready."
+                                : "Not ready yet."}
                         </div>
                     </div>
                     <h4>{"id: " + gTask?.id}</h4>
@@ -275,18 +271,24 @@ export default function GenerationEditor({ gTask }) {
                         </div>
                         <div className="editor-footer">
                             <div
-                                className="ready-container"
+                                className="status-container"
                                 style={{
-                                    backgroundColor: gTask.ready
-                                        ? "#94e4a8"
-                                        : "#ece572",
+                                    backgroundColor:
+                                        gTask.status === GTaskStatus.READY
+                                            ? "#94e4a8"
+                                            : "#ece572",
                                 }}
                             >
-                                <span className="ready-text">Ready?</span>
+                                <span className="status-text">Ready?</span>
                                 <Switch
-                                    checked={gTask.ready}
-                                    onChange={(e, val) =>
-                                        updateGTask("ready", val)
+                                    checked={gTask.status === GTaskStatus.READY}
+                                    onChange={(e, isReady) =>
+                                        updateGTask(
+                                            "status",
+                                            isReady
+                                                ? GTaskStatus.READY
+                                                : GTaskStatus.NOT_READY
+                                        )
                                     }
                                     color="primary"
                                 />

@@ -1,5 +1,14 @@
 import { nanoid } from "nanoid"
 
+export enum GTaskStatus {
+    NOT_READY = "not_ready",
+    READY = "ready",
+    RUNNING = "running",
+    COMPLETED = "completed",
+    ERROR = "error",
+    GALLERY = "gallery",
+}
+
 export default class GenerationTask {
     id: string
     command: string
@@ -9,7 +18,7 @@ export default class GenerationTask {
     seed: number
     initImage: string
     specialArgs: Record<string, { enabled: boolean; param: string }>
-    ready: boolean
+    status: string
     canvasData: { bgImgObjURL: string; paths: Record<string, unknown>[] }
     initImgExportPath: string
     customArgs: string
@@ -25,12 +34,12 @@ export default class GenerationTask {
         this.initImage = ""
         this.specialArgs = {
             prompt: { enabled: true, param: "--prompt " },
-            width: { enabled: true, param: "--width " },
-            height: { enabled: true, param: "--height " },
+            width: { enabled: true, param: "--W " },
+            height: { enabled: true, param: "--H " },
             seed: { enabled: true, param: "--seed " },
             initImage: { enabled: false, param: "--init_img " },
         }
-        this.ready = false
+        this.status = GTaskStatus.NOT_READY
         this.canvasData = { bgImgObjURL: "", paths: [] }
         this.initImgExportPath = ""
         this.command = ""

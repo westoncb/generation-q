@@ -1,9 +1,9 @@
-import React, { useState } from "react"
+import React from "react"
 import { Draggable } from "react-beautiful-dnd"
-import GenerationTask from "@src/generationTask"
+import GenerationTask, { GTaskStatus } from "@src/generationTask"
 import isEmpty from "lodash.isempty"
 import { getState, setState } from "../store"
-import { DoneOutline, FmdBad } from "@mui/icons-material"
+import { statusIconForGtask } from "./Application"
 
 export default function QueueItem({
     item,
@@ -39,7 +39,9 @@ export default function QueueItem({
                             (getState().selectedTaskId === item.id
                                 ? " selected"
                                 : "") +
-                            (item.ready ? "" : " not-ready")
+                            (item.status === GTaskStatus.READY
+                                ? ""
+                                : " not-ready")
                         }
                     >
                         <div
@@ -49,15 +51,11 @@ export default function QueueItem({
                                 alignItems: "center",
                             }}
                         >
-                            {item.ready ? (
-                                <DoneOutline
-                                    sx={{ fontSize: "1rem", mr: "0.5rem" }}
-                                />
-                            ) : (
-                                <FmdBad
-                                    sx={{ fontSize: "1rem", mr: "0.5rem" }}
-                                />
-                            )}
+                            {statusIconForGtask(item.status, {
+                                fontSize: "1rem",
+                                marginRight: "0.5rem",
+                                color: "#333",
+                            })}
 
                             <div className="prompt-text-preview">
                                 {getDisplayText(item)}
