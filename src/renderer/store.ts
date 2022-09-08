@@ -1,17 +1,5 @@
-import GenerationTask from "@src/generationTask"
+import GenerationTask, { GTaskStatus } from "@src/generationTask"
 import create from "zustand"
-
-setInterval(queueProcessorTick, 500)
-
-function queueProcessorTick() {
-    // if there's no running item,
-    // grab the top of queue and start it running
-}
-
-// @ts-ignore: ts doesn't recognize window.electronAPI
-window.electronAPI.handleGenerationTaskProgress((event, info) => {
-    console.log("got update!", info)
-})
 
 const testData: GenerationTask[] = [
     new GenerationTask(
@@ -26,7 +14,9 @@ type MainState = {
     addToQueue?: (item: GenerationTask) => void
     updateQueue?: (newQueue: GenerationTask[]) => void
     removeFromQueue?: (id: string) => void
-    updateItem?: (item: GenerationTask) => void
+    updateTask?: (item: GenerationTask) => void
+    getRunningTasks?: () => GenerationTask[]
+    completedTasks?: GenerationTask[]
 }
 
 let getState: () => MainState
@@ -36,6 +26,7 @@ const useStore = create<MainState>((set, get) => {
     setState = set
     return {
         queue: testData,
+        completedTasks: [],
         selectedTaskId: "-1",
         getTask: id => {
             return get().queue.find(item => item.id === id) ?? null
@@ -46,7 +37,7 @@ const useStore = create<MainState>((set, get) => {
         updateQueue: newQueue => {
             set({ queue: newQueue })
         },
-        updateItem: item => {
+        updateTask: item => {
             const index = get().queue.findIndex(
                 curItem => curItem.id === item.id
             )
@@ -57,6 +48,11 @@ const useStore = create<MainState>((set, get) => {
         },
         removeFromQueue: id => {
             set({ queue: get().queue.filter(item => item.id !== id) })
+        },
+        getRunningTasks() {
+            return get().queue.filter(
+                task => task.status === GTaskStatus.RUNNING
+            )
         },
     }
 })

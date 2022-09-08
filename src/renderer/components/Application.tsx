@@ -1,8 +1,7 @@
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
-import Typography from "@mui/material/Typography"
 import Box from "@mui/material/Box"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import StatusRegion from "./StatusRegion"
 import Queue from "./Queue"
 import "../style.scss"
@@ -20,6 +19,7 @@ import {
     DirectionsRun,
     PsychologyAlt,
 } from "@mui/icons-material"
+import { startQueueProcessor } from "../queueProcessor"
 
 const GENERATION_EDITOR = 0
 const COMPLETED_GENERATIONS = 1
@@ -30,6 +30,8 @@ const theme = createTheme({
         primary: { main: "#7a87cc" },
     },
 })
+
+startQueueProcessor()
 
 export default function Application() {
     const { queue, selectedTaskId } = useStore(
@@ -52,19 +54,7 @@ export default function Application() {
                             sx={{ margin: "0.5rem" }}
                             variant="contained"
                             endIcon={<AddIcon />}
-                            onClick={async e => {
-                                try {
-                                    const result =
-                                        // @ts-ignore: electronAPI is on the window
-                                        await window.electronAPI.sendNextGenerationTask(
-                                            {
-                                                prop: "this is the task",
-                                            }
-                                        )
-                                    console.log("GOT the result", result)
-                                } catch (e) {
-                                    console.log("error!", e)
-                                }
+                            onClick={e => {
                                 const newTask = new GenerationTask("")
                                 setState({ selectedTaskId: newTask.id })
                                 getState().addToQueue(newTask)

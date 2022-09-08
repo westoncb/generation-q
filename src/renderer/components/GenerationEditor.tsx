@@ -58,7 +58,7 @@ export default function GenerationEditor({ gTask }) {
     }, [canvasRef.current])
 
     const updateGTask = (prop, val) => {
-        getState().updateItem({ ...gTask, [prop]: val })
+        getState().updateTask({ ...gTask, [prop]: val })
     }
 
     if (gTask === null) {
@@ -79,9 +79,7 @@ export default function GenerationEditor({ gTask }) {
                                 justifyContent: "flex-end",
                             }}
                         >
-                            {gTask?.status === GTaskStatus.READY
-                                ? "Ready."
-                                : "Not ready yet."}
+                            {messageForGTaskStatus(gTask?.status)}
                         </div>
                     </div>
                     <h4>{"id: " + gTask?.id}</h4>
@@ -129,7 +127,7 @@ export default function GenerationEditor({ gTask }) {
                                 variant="outlined"
                                 value={gTask.prompt}
                                 onChange={e => {
-                                    getState().updateItem({
+                                    getState().updateTask({
                                         ...gTask,
                                         prompt: e.target.value,
                                     })
@@ -482,7 +480,7 @@ function getArgCustomizer(paramName, gTask, label?: string) {
             <Checkbox
                 checked={gTask.specialArgs[paramName].enabled}
                 onChange={(e, val) => {
-                    getState().updateItem({
+                    getState().updateTask({
                         ...gTask,
                         specialArgs: {
                             ...gTask.specialArgs,
@@ -504,7 +502,7 @@ function getArgCustomizer(paramName, gTask, label?: string) {
                 size="small"
                 value={gTask?.specialArgs[paramName].param}
                 onChange={e =>
-                    getState().updateItem({
+                    getState().updateTask({
                         ...gTask,
                         specialArgs: {
                             ...gTask.specialArgs,
@@ -548,4 +546,17 @@ function getPlaceholder() {
             </div>
         </div>
     )
+}
+
+function messageForGTaskStatus(status) {
+    switch (status) {
+        case GTaskStatus.RUNNING:
+            return "Running!"
+        case GTaskStatus.READY:
+            return "Ready."
+        case GTaskStatus.NOT_READY:
+            return "Not ready yet."
+        default:
+            return "Invalid status: " + status
+    }
 }

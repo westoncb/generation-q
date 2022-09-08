@@ -1,5 +1,11 @@
 import { nanoid } from "nanoid"
 
+export type GTaskResult = {
+    success: boolean
+    outputPath: string
+    errorMessage: string
+}
+
 export enum GTaskStatus {
     NOT_READY = "not_ready",
     READY = "ready",
@@ -22,6 +28,8 @@ export default class GenerationTask {
     canvasData: { bgImgObjURL: string; paths: Record<string, unknown>[] }
     initImgExportPath: string
     customArgs: string
+    generatedImagePath: string | null
+    errorMessage: string | null
 
     constructor(prompt?: string) {
         this.id = nanoid()
@@ -44,6 +52,8 @@ export default class GenerationTask {
         this.initImgExportPath = ""
         this.command = ""
         this.customArgs = ""
+        this.generatedImagePath = null
+        this.errorMessage = null
     }
 
     copy(gTask: GenerationTask) {
