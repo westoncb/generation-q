@@ -5,22 +5,18 @@ import React, { useState } from "react"
 import StatusRegion from "./StatusRegion"
 import Queue from "./Queue"
 import "../style.scss"
-import { Button } from "@mui/material"
+import { Badge, Button } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 import { setState, getState, useStore } from "../store"
 import GenerationEditor from "./GenerationEditor"
 import GenerationTask from "@src/generationTask"
 import shallow from "zustand/shallow"
-import { createTheme, Theme, ThemeProvider } from "@mui/material/styles"
+import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { GTaskStatus } from "@src/generationTask"
-import {
-    DoneOutline,
-    FmdBad,
-    DirectionsRun,
-    PsychologyAlt,
-} from "@mui/icons-material"
+import { DoneOutline, FmdBad, PsychologyAlt } from "@mui/icons-material"
 import { startQueueProcessor } from "../queueProcessor"
 import gear from "@assets/images/gear.svg"
+import isEmpty from "lodash.isempty"
 
 const GENERATION_EDITOR = 0
 const COMPLETED_GENERATIONS = 1
@@ -29,14 +25,19 @@ const GALLERY = 2
 const theme = createTheme({
     palette: {
         primary: { main: "#7a87cc" },
+        success: { main: "#70d381" },
     },
 })
 
 startQueueProcessor()
 
 export default function Application() {
-    const { queue, selectedTaskId } = useStore(
-        state => ({ queue: state.queue, selectedTaskId: state.selectedTaskId }),
+    const { queue, selectedTaskId, completedTasks } = useStore(
+        state => ({
+            queue: state.queue,
+            selectedTaskId: state.selectedTaskId,
+            completedTasks: state.completedTasks,
+        }),
         shallow
     )
     const [tabIndex, setTabIndex] = useState(GENERATION_EDITOR)
@@ -76,8 +77,20 @@ export default function Application() {
                                     label="Generation Editor"
                                     {...a11yProps(0)}
                                 />
+
                                 <Tab
-                                    label="Completed Generations"
+                                    label={
+                                        <Badge
+                                            color="success"
+                                            badgeContent={
+                                                !isEmpty(completedTasks)
+                                                    ? completedTasks.length
+                                                    : null
+                                            }
+                                        >
+                                            Completed Generations
+                                        </Badge>
+                                    }
                                     {...a11yProps(1)}
                                 />
                                 <Tab label="Gallery" {...a11yProps(2)} />

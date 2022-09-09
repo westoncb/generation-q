@@ -90,7 +90,7 @@ export default function QueueItem({
                             </div>
                             {item.status === GTaskStatus.RUNNING && (
                                 <div className="mini-console">
-                                    {terminalOutputs[item.id] + "test"}
+                                    {terminalOutputs[item.id]}
                                 </div>
                             )}
                         </div>

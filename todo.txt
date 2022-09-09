@@ -2,18 +2,16 @@ track most recently used param names
     - if any param name field is edited, update mostRecentParamNames in store
     - whenever a new GenerationTask is constructed is takes its default param names from mostRecentParamNames
 
+add events for generations start/finished
+    - then you can e.g. switch to next gTask when previous finishes, IF Generation Editor was the active tab when it finished (i.e. they were watching it run)
+
 implement queue processing behavior
-    - running item visuals:
-        - green pulse
-        - last line of status
-    - running state for GenerationEditor
-        - darkened overlay to disable ui; backgrop blur
-        - "Generating:" + prompt text + "click to see terminal output"
-            - clicking that button expands status area to show terminal output
+    - fix layout issue: if tab-panel needs to scroll, running overlay shows in weird position
 implement status bar
     - show general app status: whether anything is running, number of completed generations, items in queue 
-    - show console output + expand/collapse
+    - have indicator for any errors that occurred during task-run; click to expand and show full error elements
 implement "completed generations"
+
 implement Gallery
 
 finish up Generation Editor

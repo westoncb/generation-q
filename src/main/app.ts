@@ -11,29 +11,13 @@ function wait(time) {
         setInterval(() => resolve(), time)
     )
 }
-const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
 let termOutOffset = 0
-function generateString(length) {
+function getTermOut() {
+    const length = 50
     const str = fakeTerminalOutput.slice(termOutOffset, termOutOffset + length)
     termOutOffset = (termOutOffset + length) % fakeTerminalOutput.length
     return str
-
-    // let result = " "
-    // const charactersLength = characters.length
-    // for (let i = 0; i < length; i++) {
-    //     result += characters.charAt(
-    //         Math.floor(Math.random() * charactersLength)
-    //     )
-    // }
-
-    // return result
-}
-
-function getTermOut() {
-    // return generateString(Math.floor(Math.random() * 5000 + 50))
-    return generateString(50)
 }
 
 async function handleNextGenerationTask(event, task) {
