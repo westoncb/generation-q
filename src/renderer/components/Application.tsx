@@ -20,6 +20,7 @@ import {
     PsychologyAlt,
 } from "@mui/icons-material"
 import { startQueueProcessor } from "../queueProcessor"
+import gear from "@assets/images/gear.svg"
 
 const GENERATION_EDITOR = 0
 const COMPLETED_GENERATIONS = 1
@@ -131,14 +132,17 @@ function a11yProps(index: number) {
 }
 
 export function statusIconForGtask(status, styles) {
-    const additionalStyles = { display: "inline-block", color: "#bbb" }
+    const additionalStyles = {
+        display: "inline-block",
+        fill: "currentColor",
+    }
     switch (status) {
         case GTaskStatus.NOT_READY:
             return <FmdBad style={{ ...additionalStyles, ...styles }} />
         case GTaskStatus.READY:
             return <DoneOutline style={{ ...additionalStyles, ...styles }} />
         case GTaskStatus.RUNNING:
-            return <DirectionsRun style={{ ...additionalStyles, ...styles }} />
+            return <img src={gear} style={{ ...additionalStyles, ...styles }} />
         default:
             return <PsychologyAlt style={{ ...additionalStyles, ...styles }} />
     }

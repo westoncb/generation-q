@@ -30,6 +30,7 @@ export default class GenerationTask {
     customArgs: string
     generatedImagePath: string | null
     errorMessage: string | null
+    terminalOutput: string
 
     constructor(prompt?: string) {
         this.id = nanoid()
@@ -54,9 +55,10 @@ export default class GenerationTask {
         this.customArgs = ""
         this.generatedImagePath = null
         this.errorMessage = null
+        this.terminalOutput = ""
     }
 
-    copy(gTask: GenerationTask) {
+    copy(gTask: Record<string, unknown>) {
         Object.entries(gTask).forEach(([key, val]) => (this[key] = val))
     }
 

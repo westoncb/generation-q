@@ -70,6 +70,8 @@ export default function GenerationEditor({ gTask }) {
                     <div>
                         {statusIconForGtask(gTask?.status, {
                             fontSize: "4rem",
+                            width: "4rem",
+                            height: "4rem",
                             marginLeft: "1rem",
                         })}
                         <div

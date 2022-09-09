@@ -32,9 +32,9 @@ function getTermOut() {
 
 async function handleNextGenerationTask(event, task) {
     await new Promise(async (resolve, reject) => {
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 500; i++) {
             await wait(100)
-            sendProgress({ terminalOutput: getTermOut() })
+            sendProgress({ taskId: task.id, terminalOutput: getTermOut() })
         }
         resolve(null)
     })

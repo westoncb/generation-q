@@ -3,10 +3,8 @@ track most recently used param names
     - whenever a new GenerationTask is constructed is takes its default param names from mostRecentParamNames
 
 implement queue processing behavior
-    - store running items separately
     - running item visuals:
         - green pulse
-        - gear anim icon
         - last line of status
     - running state for GenerationEditor
         - darkened overlay to disable ui; backgrop blur

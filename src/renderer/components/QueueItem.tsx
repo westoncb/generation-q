@@ -2,8 +2,9 @@ import React from "react"
 import { Draggable } from "react-beautiful-dnd"
 import GenerationTask, { GTaskStatus } from "@src/generationTask"
 import isEmpty from "lodash.isempty"
-import { getState, setState } from "../store"
+import { getState, setState, useStore } from "../store"
 import { statusIconForGtask } from "./Application"
+import shallow from "zustand/shallow"
 
 export default function QueueItem({
     item,
@@ -14,6 +15,11 @@ export default function QueueItem({
     index: number
     dragEnabled: boolean
 }) {
+    const { terminalOutputs } = useStore(
+        state => ({ terminalOutputs: state.terminalOutputs }),
+        shallow
+    )
+
     return (
         <Draggable
             draggableId={`${item.id}`}
@@ -43,25 +49,50 @@ export default function QueueItem({
                                 : "") +
                             (item.status === GTaskStatus.READY
                                 ? ""
-                                : " not-ready")
+                                : " not-ready ") +
+                            (item.status === GTaskStatus.RUNNING
+                                ? " do-pulse"
+                                : "")
                         }
                     >
                         <div
                             style={{
                                 display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
+                                flexDirection: "column",
+                                alignItems: "stretch",
+                                justifyContent: "space-between",
+                                flexGrow: 1,
                             }}
                         >
-                            {statusIconForGtask(item.status, {
-                                fontSize: "1rem",
-                                marginRight: "0.5rem",
-                                color: "#333",
-                            })}
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    flexGrow: 1,
+                                    padding: "0.5rem",
+                                }}
+                            >
+                                {statusIconForGtask(item.status, {
+                                    fontSize: "1.5rem",
+                                    width: "1.5rem",
+                                    height: "1.5rem",
+                                    marginRight: "0.5rem",
+                                    color: "#333",
+                                })}
 
-                            <div className="prompt-text-preview">
-                                {getDisplayText(item)}
+                                <div
+                                    style={{ transform: "none" }}
+                                    className={"prompt-text-preview"}
+                                >
+                                    {getDisplayText(item)}
+                                </div>
                             </div>
+                            {item.status === GTaskStatus.RUNNING && (
+                                <div className="mini-console">
+                                    {terminalOutputs[item.id] + "test"}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

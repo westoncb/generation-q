@@ -1,5 +1,5 @@
 import { getState, setState } from "./store"
-import { GTaskResult, GTaskStatus } from "../generationTask"
+import GenerationTask, { GTaskResult, GTaskStatus } from "../generationTask"
 import isNil from "lodash.isnil"
 import isEmpty from "lodash.isempty"
 
@@ -54,5 +54,5 @@ async function executeTask(task) {
 
 // @ts-ignore: ts doesn't recognize window.electronAPI
 window.electronAPI.handleGenerationTaskProgress((event, info) => {
-    console.log("got update!", info)
+    getState().updateTerminalOutput(info.taskId, info.terminalOutput)
 })

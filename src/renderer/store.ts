@@ -17,6 +17,9 @@ type MainState = {
     updateTask?: (item: GenerationTask) => void
     getRunningTasks?: () => GenerationTask[]
     completedTasks?: GenerationTask[]
+    terminalOutputs?: { id: string } | {}
+    updateTerminalOutput?: (id: string, newText: string) => void
+    getTerminalOutputForTask?: (id: string) => string
 }
 
 let getState: () => MainState
@@ -28,6 +31,7 @@ const useStore = create<MainState>((set, get) => {
         queue: testData,
         completedTasks: [],
         selectedTaskId: "-1",
+        terminalOutputs: {},
         getTask: id => {
             return get().queue.find(item => item.id === id) ?? null
         },
@@ -43,7 +47,7 @@ const useStore = create<MainState>((set, get) => {
             )
             const newQueue = get().queue.slice()
             newQueue[index] = new GenerationTask()
-            newQueue[index].copy(item)
+            newQueue[index].copy({ ...item })
             set({ queue: newQueue })
         },
         removeFromQueue: id => {
@@ -53,6 +57,18 @@ const useStore = create<MainState>((set, get) => {
             return get().queue.filter(
                 task => task.status === GTaskStatus.RUNNING
             )
+        },
+        updateTerminalOutput: (id: string, newText: string) => {
+            const newFullText = (get().terminalOutputs[id] ?? "") + newText
+            set({
+                terminalOutputs: {
+                    ...get().terminalOutputs,
+                    [id]: newFullText.slice(-5000),
+                },
+            })
+        },
+        getTerminalOutputForTask: id => {
+            return get().terminalOutputs[id]
         },
     }
 })
