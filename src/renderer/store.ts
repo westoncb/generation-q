@@ -63,7 +63,7 @@ const useStore = create<MainState>((set, get) => {
             set({
                 terminalOutputs: {
                     ...get().terminalOutputs,
-                    [id]: newFullText.slice(-5000),
+                    [id]: newFullText.slice(-10000),
                 },
             })
         },

@@ -15,6 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import isNil from "lodash.isnil"
 import { GTaskStatus } from "@src/generationTask"
 import { statusIconForGtask } from "./Application"
+import Terminal from "./Terminal"
 
 export default function GenerationEditor({ gTask }) {
     const [canvasProps, setCanvasProps] = useState({
@@ -66,6 +67,24 @@ export default function GenerationEditor({ gTask }) {
     } else {
         return (
             <div className="generation-editor">
+                {gTask.status === GTaskStatus.RUNNING && (
+                    <div className="running-overlay">
+                        <h1>Generating: </h1>
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                            }}
+                        >
+                            <div className="overlay-prompt-text">
+                                {gTask.prompt}
+                            </div>
+                            <Terminal gTask={gTask} />
+                        </div>
+                    </div>
+                )}
                 <div className="editor-header">
                     <div>
                         {statusIconForGtask(gTask?.status, {
@@ -95,10 +114,10 @@ export default function GenerationEditor({ gTask }) {
                         pt: "0",
                         boxSizing: "border-box",
                         width: "100%",
-                        height: "100%",
                         display: "flex",
                         flexDirection: "row",
                         justifyContent: "stretch",
+                        flexGrow: "1",
                     }}
                 >
                     <div
