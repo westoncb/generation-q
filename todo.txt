@@ -1,19 +1,30 @@
 track most recently used param names
     - if any param name field is edited, update mostRecentParamNames in store
     - whenever a new GenerationTask is constructed is takes its default param names from mostRecentParamNames
+    - do this for `command` and init image export directory too
+        - or find another way to store/recall previously used commands/export locations
 
-add events for generations start/finished
-    - then you can e.g. switch to next gTask when previous finishes, IF Generation Editor was the active tab when it finished (i.e. they were watching it run)
+implement "completed generations"
+    each item should have:
+        - run again
+        - delete
+            - have a countdown + cancel option
+        - save to gallery/database
+    use card visual with 'perspective tilt'
 
-implement queue processing behavior
-    - fix layout issue: if tab-panel needs to scroll, running overlay shows in weird position
+implement Gallery
+    - searchable/filterable; backed by sqlite db
+    - 'curved grid' view
+    - items can be deleted or "re-run" (clone/run associated gTask)
+
 implement status bar
     - show general app status: whether anything is running, number of completed generations, items in queue 
     - have indicator for any errors that occurred during task-run; click to expand and show full error elements
-implement "completed generations"
-
-implement Gallery
 
 finish up Generation Editor
+    - fix layout issue: if tab-panel needs to scroll, running overlay shows in weird position
     - [maybe] add img path export / file-writing
     - [maybe] sync canvas width/height to w/h args
+
+[maybe] add events for generations start/finished
+    - then you can e.g. switch to next gTask when previous finishes, IF Generation Editor was the active tab when it finished (i.e. they were watching it run)
