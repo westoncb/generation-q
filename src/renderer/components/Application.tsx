@@ -7,7 +7,7 @@ import Queue from "./Queue"
 import "../style.scss"
 import { Badge, Button } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
-import { setState, getState, useStore } from "../store"
+import { setState, getState, useStore, TabNames } from "../store"
 import GenerationEditor from "./GenerationEditor"
 import GenerationTask from "@src/generationTask"
 import shallow from "zustand/shallow"
@@ -17,10 +17,6 @@ import { DoneOutline, FmdBad, PsychologyAlt } from "@mui/icons-material"
 import { startQueueProcessor } from "../queueProcessor"
 import gear from "@assets/images/gear.svg"
 import isEmpty from "lodash.isempty"
-
-const GENERATION_EDITOR = 0
-const COMPLETED_GENERATIONS = 1
-const GALLERY = 2
 
 const theme = createTheme({
     palette: {
@@ -32,18 +28,18 @@ const theme = createTheme({
 startQueueProcessor()
 
 export default function Application() {
-    const { queue, selectedTaskId, completedTasks } = useStore(
+    const { queue, selectedTaskId, completedTasks, activeTab } = useStore(
         state => ({
             queue: state.queue,
             selectedTaskId: state.selectedTaskId,
             completedTasks: state.completedTasks,
+            activeTab: state.activeTab,
         }),
         shallow
     )
-    const [tabIndex, setTabIndex] = useState(GENERATION_EDITOR)
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-        setTabIndex(newValue)
+        setState({ activeTab: newValue })
     }
 
     return (
@@ -69,7 +65,7 @@ export default function Application() {
                     <div className="main-area">
                         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                             <Tabs
-                                value={tabIndex}
+                                value={activeTab}
                                 onChange={handleTabChange}
                                 aria-label="basic tabs example"
                             >
@@ -96,16 +92,22 @@ export default function Application() {
                                 <Tab label="Gallery" {...a11yProps(2)} />
                             </Tabs>
                         </Box>
-                        <TabPanel value={tabIndex} index={GENERATION_EDITOR}>
+                        <TabPanel
+                            value={activeTab}
+                            index={TabNames.GENERATION_EDITOR}
+                        >
                             <GenerationEditor
                                 gTask={getState().getTask(selectedTaskId)}
                             />
                         </TabPanel>
                         <TabPanel
-                            value={tabIndex}
-                            index={COMPLETED_GENERATIONS}
+                            value={activeTab}
+                            index={TabNames.COMPLETED_GENERATIONS}
                         ></TabPanel>
-                        <TabPanel value={tabIndex} index={GALLERY}></TabPanel>
+                        <TabPanel
+                            value={activeTab}
+                            index={TabNames.GALLERY}
+                        ></TabPanel>
                     </div>
                 </div>
                 <StatusRegion />

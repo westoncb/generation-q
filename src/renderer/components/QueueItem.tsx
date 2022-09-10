@@ -32,7 +32,7 @@ export default function QueueItem({
                     <div className="queue-item-index">{index + 1}</div>
                     <div
                         onClick={e => {
-                            setState({ selectedTaskId: item.id })
+                            setState({ selectedTaskId: item.id, activeTab: 0 })
                             e.stopPropagation()
                         }}
                         tabIndex={"-1"}

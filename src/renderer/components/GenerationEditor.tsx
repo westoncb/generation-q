@@ -142,7 +142,7 @@ export default function GenerationEditor({ gTask }) {
                                 sx={{ mb: "1rem" }}
                                 className="genq-basic-input"
                                 multiline
-                                rows={4}
+                                rows={2}
                                 aria-label="prompt"
                                 placeholder="what would you like to generate?"
                                 variant="outlined"
@@ -157,70 +157,50 @@ export default function GenerationEditor({ gTask }) {
 
                             <div className="grouping-capsule">
                                 {getArgCustomizer("width", gTask)}
-                                <FormControl
+                                <Slider
+                                    min={256}
+                                    max={1024}
+                                    step={64}
+                                    value={gTask.width}
+                                    onChange={(e, val) =>
+                                        updateGTask("width", val as number)
+                                    }
+                                    marks
+                                    valueLabelDisplay="auto"
                                     sx={{
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
+                                        display: "inline-block",
+                                        ml: "1rem",
+                                        mr: "1rem",
+                                        minWidth: "5rem",
                                     }}
-                                >
-                                    <span
-                                        style={{ marginRight: "1rem" }}
-                                        className="aux-value-display"
-                                    >
-                                        {gTask.width}
-                                    </span>
-                                    <Slider
-                                        min={256}
-                                        max={1024}
-                                        step={64}
-                                        value={gTask.width}
-                                        onChange={(e, val) =>
-                                            updateGTask("width", val as number)
-                                        }
-                                        marks
-                                        valueLabelDisplay="auto"
-                                        sx={{
-                                            display: "inline-block",
-                                            ml: "0.5rem",
-                                            flexGrow: 1,
-                                        }}
-                                    />
-                                </FormControl>
+                                />
+                                <span className="aux-value-display">
+                                    {gTask.width}
+                                </span>
                             </div>
 
                             <div className="grouping-capsule">
                                 {getArgCustomizer("height", gTask)}
-                                <FormControl
+                                <Slider
+                                    min={256}
+                                    max={1024}
+                                    step={64}
+                                    value={gTask.height}
+                                    onChange={(e, val) =>
+                                        updateGTask("height", val as number)
+                                    }
+                                    marks
+                                    valueLabelDisplay="auto"
                                     sx={{
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
+                                        display: "inline-block",
+                                        ml: "1rem",
+                                        mr: "1rem",
+                                        minWidth: "5rem",
                                     }}
-                                >
-                                    <span
-                                        style={{ marginRight: "1rem" }}
-                                        className="aux-value-display"
-                                    >
-                                        {gTask.height}
-                                    </span>
-                                    <Slider
-                                        min={256}
-                                        max={1024}
-                                        step={64}
-                                        value={gTask.height}
-                                        onChange={(e, val) =>
-                                            updateGTask("height", val as number)
-                                        }
-                                        marks
-                                        valueLabelDisplay="auto"
-                                        sx={{
-                                            display: "inline-block",
-                                            ml: "0.5rem",
-                                            flexGrow: 1,
-                                        }}
-                                    />
-                                </FormControl>
+                                />
+                                <span className="aux-value-display">
+                                    {gTask.height}
+                                </span>
                             </div>
 
                             <div
@@ -262,31 +242,60 @@ export default function GenerationEditor({ gTask }) {
                                 rows={2}
                                 multiline
                                 aria-label="command"
-                                placeholder="enter command to execute, e.g. `python ~/sd/scripts/dream.py`"
-                                defaultValue=""
+                                placeholder="enter command to execute, e.g. `python ~/SD/scripts/img2img.py`"
+                                value={gTask.command}
+                                onChange={e =>
+                                    updateGTask("command", e.target.value)
+                                }
                                 variant="outlined"
                             />
                             <TextField
                                 className="genq-basic-input"
                                 label="Custom args"
                                 spellCheck={false}
-                                rows={3}
+                                rows={2}
                                 multiline
                                 aria-label="args"
                                 placeholder="enter additional args you'd like to pass in, e.g. `--iterations 42`"
-                                defaultValue=""
+                                value={gTask.customArgs}
+                                onChange={e =>
+                                    updateGTask("customArgs", e.target.value)
+                                }
                                 variant="outlined"
                             />
                             <TextField
+                                sx={{ mb: "1rem" }}
                                 disabled
                                 className="aux-value-display"
-                                rows={3}
+                                rows={4}
                                 multiline
                                 aria-label="auto-args"
                                 value={generatedArgs}
                                 placeholder="no generated args"
                                 variant="outlined"
                             />
+
+                            <div className="grouping-capsule">
+                                {getArgCustomizer(
+                                    "outputDir",
+                                    gTask,
+                                    "Output directory"
+                                )}
+                                <TextField
+                                    sx={{ ml: "1rem" }}
+                                    inputProps={{
+                                        style: {
+                                            padding: "0.5rem",
+                                        },
+                                    }}
+                                    placeholder="~/generated_images"
+                                    className="genq-basic-input"
+                                    onChange={e =>
+                                        updateGTask("outputDir", e.target.value)
+                                    }
+                                    value={gTask?.outputDir}
+                                />
+                            </div>
                         </div>
                         <div className="editor-footer">
                             <div
@@ -501,7 +510,7 @@ function getArgCustomizer(paramName, gTask, label?: string) {
                 alignItems: "center",
             }}
         >
-            <InputLabel sx={{ flexShrink: 0, width: "3.5rem" }}>
+            <InputLabel sx={{ flexShrink: 0, minWidth: "3.5rem" }}>
                 {label}
             </InputLabel>
             <Checkbox
@@ -524,6 +533,8 @@ function getArgCustomizer(paramName, gTask, label?: string) {
                 inputProps={{
                     style: {
                         padding: "0.25rem",
+                        flexShrink: 0,
+                        minWidth: "3rem",
                     },
                 }}
                 size="small"

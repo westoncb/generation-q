@@ -85,6 +85,7 @@ body {
     width: calc($left-column-width - 1rem);
     max-width: calc($left-column-width - 1rem);
     margin: 0.5rem;
+    margin-bottom: 1rem;
     transition: transform 300ms;
     transform-origin: top center;
 }
@@ -245,9 +246,14 @@ body {
 }
 
 .grouping-capsule {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     background-color: rgba(0, 0, 0, 0.05);
     border: 1px solid #ccc;
-    padding: 1rem;
+    padding: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     border-radius: 5px;
     margin-bottom: 1rem;
 }

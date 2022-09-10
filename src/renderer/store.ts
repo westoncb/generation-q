@@ -7,6 +7,12 @@ const testData: GenerationTask[] = [
     ),
 ]
 
+export enum TabNames {
+    GENERATION_EDITOR = 0,
+    COMPLETED_GENERATIONS = 1,
+    GALLERY = 2,
+}
+
 type MainState = {
     queue?: GenerationTask[]
     selectedTaskId?: string
@@ -20,6 +26,7 @@ type MainState = {
     terminalOutputs?: { id: string } | {}
     updateTerminalOutput?: (id: string, newText: string) => void
     getTerminalOutputForTask?: (id: string) => string
+    activeTab?: number
 }
 
 let getState: () => MainState
@@ -32,6 +39,7 @@ const useStore = create<MainState>((set, get) => {
         completedTasks: [],
         selectedTaskId: "-1",
         terminalOutputs: {},
+        activeTab: TabNames.GENERATION_EDITOR,
         getTask: id => {
             return get().queue.find(item => item.id === id) ?? null
         },

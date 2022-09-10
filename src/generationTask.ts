@@ -31,6 +31,7 @@ export default class GenerationTask {
     generatedImagePath: string | null
     errorMessage: string | null
     terminalOutput: string
+    outputDir: string
 
     constructor(prompt?: string) {
         this.id = nanoid()
@@ -47,15 +48,17 @@ export default class GenerationTask {
             height: { enabled: true, param: "--H " },
             seed: { enabled: true, param: "--seed " },
             initImage: { enabled: false, param: "--init_img " },
+            outputDir: { enabled: true, param: "--outdir " },
         }
         this.status = GTaskStatus.NOT_READY
         this.canvasData = { bgImgObjURL: "", paths: [] }
-        this.initImgExportPath = ""
+        this.initImgExportPath = "~/generationq/init_images/" + this.id + ".png"
         this.command = ""
         this.customArgs = ""
         this.generatedImagePath = null
         this.errorMessage = null
         this.terminalOutput = ""
+        this.outputDir = "~/generationq/generated-images"
     }
 
     copy(gTask: Record<string, unknown>) {
