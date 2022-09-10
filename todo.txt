@@ -11,6 +11,7 @@ implement "completed generations"
             - have a countdown + cancel option
         - save to gallery/database
     use card visual with 'perspective tilt'
+    should have a "view details" button that shows a table with all Gtask props and values; should be a reusable component, available on gallery items too
 
 implement Gallery
     - searchable/filterable; backed by sqlite db
@@ -24,7 +25,13 @@ implement status bar
 finish up Generation Editor
     - fix layout issue: if tab-panel needs to scroll, running overlay shows in weird position
     - [maybe] add img path export / file-writing
-    - [maybe] sync canvas width/height to w/h args
+    - [maybe] sync canvas width/height to w/h args (its current layout should be adopted by a scrolling container so the canvas can be arbitrary sizes within it without breaking the layout)
+
+set default export path to appData/generationQ/init_image_[taskId].png
+
+add actions to preload.js (context bridge)
+    - exportInitImage(path, data) => succeed/fail
+    - scanForNewImages(outputDirectories) => string[] (new image paths)
 
 [maybe] add events for generations start/finished
     - then you can e.g. switch to next gTask when previous finishes, IF Generation Editor was the active tab when it finished (i.e. they were watching it run)
