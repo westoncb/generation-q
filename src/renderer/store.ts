@@ -54,8 +54,15 @@ const sampleGTaskData = {
     outputFile: null,
 }
 const testGTask = new GenerationTask(sampleGTaskData.prompt)
-testGTask.copy(sampleGTaskData)
+testGTask.copy(sampleGTaskData, true)
 const testCompletedTasks = [testGTask]
+
+const testGalleryData = []
+for (let i = 0; i < 100; i++) {
+    const testGTask = new GenerationTask(sampleGTaskData.prompt)
+    testGTask.copy(sampleGTaskData, true)
+    testGalleryData.push(testGTask)
+}
 
 export enum TabNames {
     GENERATION_EDITOR = 0,
@@ -73,6 +80,7 @@ type MainState = {
     updateQueue?: (newQueue: GenerationTask[]) => void
     removeFromQueue?: (id: string) => void
     updateTask?: (item: GenerationTask) => void
+    removeCompletedTask?: (id: string) => void
     getRunningTasks?: () => GenerationTask[]
     terminalOutputs?: { id: string } | {}
     updateTerminalOutput?: (id: string, newText: string) => void
@@ -88,6 +96,7 @@ const useStore = create<MainState>((set, get) => {
     return {
         queue: testData,
         completedTasks: testCompletedTasks,
+        gallery: testGalleryData,
         selectedTaskId: "-1",
         terminalOutputs: {},
         activeTab: TabNames.COMPLETED_GENERATIONS,
@@ -111,6 +120,11 @@ const useStore = create<MainState>((set, get) => {
         },
         removeFromQueue: id => {
             set({ queue: get().queue.filter(item => item.id !== id) })
+        },
+        removeCompletedTask: id => {
+            set({
+                completedTasks: get().completedTasks.filter(t => t.id !== id),
+            })
         },
         getRunningTasks() {
             return get().queue.filter(

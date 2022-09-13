@@ -69,8 +69,10 @@ export default class GenerationTask {
         this.outputFile = null
     }
 
-    copy(gTask: Record<string, unknown>) {
+    copy(gTask: Record<string, unknown>, retainId = false) {
+        const oldId = this.id
         Object.entries(gTask).forEach(([key, val]) => (this[key] = val))
+        if (retainId) this.id = oldId
     }
 
     getGeneratedArgs(): string {

@@ -8,6 +8,7 @@ import DoneIcon from "@mui/icons-material/Done"
 import { setState, getState } from "../store"
 import DialogTitle from "@mui/material/DialogTitle"
 import Dialog from "@mui/material/Dialog"
+import GenerationTask from "@src/generationTask"
 
 export default function CompletedGenerations({ gTasks }) {
     return (
@@ -55,7 +56,7 @@ function CompletedGTask({ gTask }) {
                     {deleteLimboCount}
                 </div>
                 <div className="delete-limbo-prompt">
-                    Are you sure you want to delete this?
+                    Are you sure you want to delete?
                 </div>
                 <Button
                     onClick={e => {
@@ -98,12 +99,7 @@ function CompletedGTask({ gTask }) {
                             countIntervalId.current = setInterval(() => {
                                 if (localLimboCount === 1) {
                                     setInDeleteLimbo(false)
-                                    setState({
-                                        completedTasks:
-                                            getState().completedTasks.filter(
-                                                t => t.id !== gTask.id
-                                            ),
-                                    })
+                                    getState().removeCompletedTask(gTask.id)
                                     clearInterval(countIntervalId.current)
                                 }
 
@@ -130,7 +126,13 @@ function CompletedGTask({ gTask }) {
                     Delete
                 </div>
                 <div style={buttonWithTextStyle}>
-                    <IconButton>
+                    <IconButton
+                        onClick={e => {
+                            const t = new GenerationTask()
+                            t.copy(gTask, true)
+                            getState().addToQueue(t)
+                        }}
+                    >
                         <RefreshIcon
                             sx={{ fontSize: iconSize, color: "#8a97df" }}
                         />
@@ -146,7 +148,15 @@ function CompletedGTask({ gTask }) {
                     View details
                 </div>
                 <div style={buttonWithTextStyle}>
-                    <IconButton>
+                    <IconButton
+                        onClick={e => {
+                            getState().removeCompletedTask(gTask.id)
+                            // add to gallery
+                            setState({
+                                gallery: [...getState().gallery, gTask],
+                            })
+                        }}
+                    >
                         <DoneIcon
                             sx={{ fontSize: iconSize, color: "#46d646" }}
                         />
@@ -169,8 +179,11 @@ function DetailsDialog({ gTask, show, onClose }) {
             <DialogTitle>Generation task details</DialogTitle>
             <div className="details-dialog">
                 <div className="details-table">
-                    {interleavedKeyVals.map(element => (
+                    {interleavedKeyVals.map((element, i) => (
                         <div
+                            // I'm just using i to avoid React warnings;
+                            // this data is not dynamic so shouldn't matter
+                            key={i}
                             style={{
                                 backgroundColor: "#ddd",
                                 padding: "0.5rem",

@@ -18,6 +18,7 @@ import { startQueueProcessor } from "../queueProcessor"
 import gear from "@assets/images/gear.svg"
 import isEmpty from "lodash.isempty"
 import CompletedGenerations from "./CompletedGenerations"
+import Gallery from "./Gallery"
 
 const theme = createTheme({
     palette: {
@@ -112,10 +113,9 @@ export default function Application() {
                         >
                             <CompletedGenerations gTasks={completedTasks} />
                         </TabPanel>
-                        <TabPanel
-                            value={activeTab}
-                            index={TabNames.GALLERY}
-                        ></TabPanel>
+                        <TabPanel value={activeTab} index={TabNames.GALLERY}>
+                            <Gallery />
+                        </TabPanel>
                     </div>
                 </div>
                 <StatusRegion />
