@@ -6,8 +6,8 @@ import RefreshIcon from "@mui/icons-material/Refresh"
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings"
 import DoneIcon from "@mui/icons-material/Done"
 import { setState, getState } from "../store"
-import DialogTitle from "@mui/material/DialogTitle"
-import Dialog from "@mui/material/Dialog"
+import DetailsDialog from "./DetailsDialog"
+
 import GenerationTask from "@src/generationTask"
 
 export default function CompletedGenerations({ gTasks }) {
@@ -165,39 +165,5 @@ function CompletedGTask({ gTask }) {
                 </div>
             </div>
         </div>
-    )
-}
-
-function DetailsDialog({ gTask, show, onClose }) {
-    const interleavedKeyVals = Object.entries(gTask).reduce(
-        (all, entry) => all.concat(entry),
-        []
-    )
-
-    return (
-        <Dialog onClose={onClose} open={show}>
-            <DialogTitle>Generation task details</DialogTitle>
-            <div className="details-dialog">
-                <div className="details-table">
-                    {interleavedKeyVals.map((element, i) => (
-                        <div
-                            // I'm just using i to avoid React warnings;
-                            // this data is not dynamic so shouldn't matter
-                            key={i}
-                            style={{
-                                backgroundColor: "#ddd",
-                                padding: "0.5rem",
-                                maxHeight: "15rem",
-                                overflowY: "scroll",
-                            }}
-                        >
-                            {typeof element === "object"
-                                ? JSON.stringify(element)
-                                : element}
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </Dialog>
     )
 }
