@@ -33,6 +33,9 @@ function CompletedGTask({ gTask }) {
         marginBottom: "0.5rem",
     }
 
+    // Will probably need to communicate with the Node process to load
+    // the actual image using gTask.outputFile
+
     return (
         <div className="completed-gtask">
             <div
@@ -57,6 +60,13 @@ function CompletedGTask({ gTask }) {
             </div>
             <div className="completed-gtask-title">{gTask.id}</div>
             <div className="gtask-image-container">
+                {gTask.outputFile === null && (
+                    <div className="missing-output-msg">
+                        Could not find output file!
+                    </div>
+                )}
+                {/* Just always using placeholder for now, but should check
+                for gTask.outputFile === null before using in the future */}
                 <img src={placeholder} className="gtask-image" />
             </div>
             <div className="completed-gtask-prompt">{gTask.prompt}</div>
