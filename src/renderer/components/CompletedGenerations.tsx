@@ -3,8 +3,11 @@ import React, { useState, useRef } from "react"
 import placeholder from "../../../assets/images/placeholders/00024.png"
 import DeleteIcon from "@mui/icons-material/Delete"
 import RefreshIcon from "@mui/icons-material/Refresh"
+import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings"
 import DoneIcon from "@mui/icons-material/Done"
 import { setState, getState } from "../store"
+import DialogTitle from "@mui/material/DialogTitle"
+import Dialog from "@mui/material/Dialog"
 
 export default function CompletedGenerations({ gTasks }) {
     return (
@@ -23,6 +26,7 @@ const STEP_DURATION = 750 // make sure to keep in sync with .delete-limbo-count-
 function CompletedGTask({ gTask }) {
     const [inDeleteLimbo, setInDeleteLimbo] = useState(false)
     const [deleteLimboCount, setDeleteLimboCount] = useState(LIMBO_COUNT_START)
+    const [showDetailsDialog, setShowDetailsDialog] = useState(false)
     const countElementRef = useRef(null)
     const countIntervalId = useRef(null)
 
@@ -38,6 +42,11 @@ function CompletedGTask({ gTask }) {
 
     return (
         <div className="completed-gtask">
+            <DetailsDialog
+                onClose={() => setShowDetailsDialog(false)}
+                gTask={gTask}
+                show={showDetailsDialog}
+            />
             <div
                 className="delete-limbo"
                 style={{ display: inDeleteLimbo ? "flex" : "none" }}
@@ -62,7 +71,7 @@ function CompletedGTask({ gTask }) {
             <div className="gtask-image-container">
                 {gTask.outputFile === null && (
                     <div className="missing-output-msg">
-                        Could not find output file!
+                        Could not find generated image file!
                     </div>
                 )}
                 {/* Just always using placeholder for now, but should check
@@ -76,7 +85,7 @@ function CompletedGTask({ gTask }) {
                         onClick={e => {
                             setInDeleteLimbo(true)
 
-                            // We have a second local copy of this because this onClick closure
+                            // We have a second local copy of this because the onClick closure
                             // will have only the initial value of deleteLimboCount across all
                             // executions of setInterval below; we need deleteLimboCount as part
                             // of the component state in order to render it visually, and we need
@@ -128,7 +137,14 @@ function CompletedGTask({ gTask }) {
                     </IconButton>
                     Re-run generation
                 </div>
-
+                <div style={buttonWithTextStyle}>
+                    <IconButton onClick={e => setShowDetailsDialog(true)}>
+                        <DisplaySettingsIcon
+                            sx={{ fontSize: iconSize, color: "#8a97df" }}
+                        />
+                    </IconButton>
+                    View details
+                </div>
                 <div style={buttonWithTextStyle}>
                     <IconButton>
                         <DoneIcon
@@ -139,5 +155,36 @@ function CompletedGTask({ gTask }) {
                 </div>
             </div>
         </div>
+    )
+}
+
+function DetailsDialog({ gTask, show, onClose }) {
+    const interleavedKeyVals = Object.entries(gTask).reduce(
+        (all, entry) => all.concat(entry),
+        []
+    )
+
+    return (
+        <Dialog onClose={onClose} open={show}>
+            <DialogTitle>Generation task details</DialogTitle>
+            <div className="details-dialog">
+                <div className="details-table">
+                    {interleavedKeyVals.map(element => (
+                        <div
+                            style={{
+                                backgroundColor: "#ddd",
+                                padding: "0.5rem",
+                                maxHeight: "15rem",
+                                overflowY: "scroll",
+                            }}
+                        >
+                            {typeof element === "object"
+                                ? JSON.stringify(element)
+                                : element}
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </Dialog>
     )
 }

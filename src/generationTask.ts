@@ -30,7 +30,6 @@ export default class GenerationTask {
     customArgs: string
     generatedImagePath: string | null
     errorMessage: string | null
-    terminalOutput: string
 
     // The idea behind these two is: outputDir would be used for
     // periodically scanning a location, looking for a new image file
@@ -66,7 +65,6 @@ export default class GenerationTask {
         this.customArgs = ""
         this.generatedImagePath = null
         this.errorMessage = null
-        this.terminalOutput = ""
         this.outputDir = "~/generationq/generated-images"
         this.outputFile = null
     }

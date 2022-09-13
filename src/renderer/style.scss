@@ -415,7 +415,9 @@ body {
 
 .completed-gtask-prompt {
     width: $completed-image-size;
-    min-height: 5rem;
+    height: 6rem;
+    max-height: 6rem;
+    overflow-y: scroll;
     flex-grow: 1;
     max-width: $completed-image-size;
     background-color: rgba(185, 203, 216, 0.2);
@@ -497,4 +499,17 @@ body {
     background-color: rgba(0, 0, 0, 0.75);
     border-top: 1px solid black;
     border-bottom: 1px solid black;
+}
+
+.details-dialog {
+    padding: 1rem;
+    overflow-y: scroll;
+}
+
+.details-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    padding: 1px;
+    background-color: #c1c1c1;
 }

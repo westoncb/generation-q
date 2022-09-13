@@ -50,7 +50,6 @@ const sampleGTaskData = {
     initImgExportPath: "~/generationq/init_images/Ixp3LJtaNqXihazXuybYd.png",
     generatedImagePath: null,
     errorMessage: null,
-    terminalOutput: "",
     outputDir: "~/generationq/generated-images",
     outputFile: null,
 }
@@ -66,6 +65,8 @@ export enum TabNames {
 
 type MainState = {
     queue?: GenerationTask[]
+    completedTasks?: GenerationTask[]
+    gallery?: GenerationTask[]
     selectedTaskId?: string
     getTask?: (id: string) => GenerationTask
     addToQueue?: (item: GenerationTask) => void
@@ -73,7 +74,6 @@ type MainState = {
     removeFromQueue?: (id: string) => void
     updateTask?: (item: GenerationTask) => void
     getRunningTasks?: () => GenerationTask[]
-    completedTasks?: GenerationTask[]
     terminalOutputs?: { id: string } | {}
     updateTerminalOutput?: (id: string, newText: string) => void
     getTerminalOutputForTask?: (id: string) => string
