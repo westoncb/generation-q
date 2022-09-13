@@ -31,7 +31,16 @@ export default class GenerationTask {
     generatedImagePath: string | null
     errorMessage: string | null
     terminalOutput: string
+
+    // The idea behind these two is: outputDir would be used for
+    // periodically scanning a location, looking for a new image file
+    // to be added; outputPath would be the exact path to the image file,
+    // only discoverable once that file is actually generated. Clearly there
+    // are limitations to this approach, but I haven't thought of another
+    // which wouldn't sacrifice generality (as far as which specific generation
+    // programs this can be used with).
     outputDir: string
+    outputFile: string | null
 
     constructor(prompt?: string) {
         this.id = nanoid()
@@ -59,6 +68,7 @@ export default class GenerationTask {
         this.errorMessage = null
         this.terminalOutput = ""
         this.outputDir = "~/generationq/generated-images"
+        this.outputFile = null
     }
 
     copy(gTask: Record<string, unknown>) {

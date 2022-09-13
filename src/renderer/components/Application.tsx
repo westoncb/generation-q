@@ -17,6 +17,7 @@ import { DoneOutline, FmdBad, PsychologyAlt } from "@mui/icons-material"
 import { startQueueProcessor } from "../queueProcessor"
 import gear from "@assets/images/gear.svg"
 import isEmpty from "lodash.isempty"
+import CompletedGenerations from "./CompletedGenerations"
 
 const theme = createTheme({
     palette: {
@@ -71,7 +72,7 @@ export default function Application() {
                             >
                                 <Tab
                                     label="Generation Editor"
-                                    {...a11yProps(0)}
+                                    {...a11yProps(TabNames.GENERATION_EDITOR)}
                                 />
 
                                 <Tab
@@ -87,9 +88,14 @@ export default function Application() {
                                             Completed Generations
                                         </Badge>
                                     }
-                                    {...a11yProps(1)}
+                                    {...a11yProps(
+                                        TabNames.COMPLETED_GENERATIONS
+                                    )}
                                 />
-                                <Tab label="Gallery" {...a11yProps(2)} />
+                                <Tab
+                                    label="Gallery"
+                                    {...a11yProps(TabNames.GALLERY)}
+                                />
                             </Tabs>
                         </Box>
                         <TabPanel
@@ -103,7 +109,9 @@ export default function Application() {
                         <TabPanel
                             value={activeTab}
                             index={TabNames.COMPLETED_GENERATIONS}
-                        ></TabPanel>
+                        >
+                            <CompletedGenerations gTasks={completedTasks} />
+                        </TabPanel>
                         <TabPanel
                             value={activeTab}
                             index={TabNames.GALLERY}

@@ -7,6 +7,57 @@ const testData: GenerationTask[] = [
     ),
 ]
 
+const sampleGTaskData = {
+    id: "Ixp3LJtaNqXihazXuybYd",
+    prompt: '"The Doom marine riding a Yorp into the sunset, trending on artstation HQ"',
+    command: "python ~/stable-diffusion/orig_scripts/img2img.py",
+    customArgs: "--n_iter 4 --n_samples 2 --ddim_steps 64 --precision full",
+    width: 512,
+    height: 768,
+    seed: 4754,
+    initImage: "",
+    specialArgs: {
+        prompt: {
+            enabled: true,
+            param: "--prompt ",
+        },
+        width: {
+            enabled: true,
+            param: "--W ",
+        },
+        height: {
+            enabled: true,
+            param: "--H ",
+        },
+        seed: {
+            enabled: true,
+            param: "--seed ",
+        },
+        initImage: {
+            enabled: true,
+            param: "--init_img ",
+        },
+        outputDir: {
+            enabled: true,
+            param: "--outdir ",
+        },
+    },
+    status: "not_ready",
+    canvasData: {
+        bgImgObjURL: "",
+        paths: [],
+    },
+    initImgExportPath: "~/generationq/init_images/Ixp3LJtaNqXihazXuybYd.png",
+    generatedImagePath: null,
+    errorMessage: null,
+    terminalOutput: "",
+    outputDir: "~/generationq/generated-images",
+    outputFile: null,
+}
+const testGTask = new GenerationTask(sampleGTaskData.prompt)
+testGTask.copy(sampleGTaskData)
+const testCompletedTasks = [testGTask]
+
 export enum TabNames {
     GENERATION_EDITOR = 0,
     COMPLETED_GENERATIONS = 1,
@@ -36,10 +87,10 @@ const useStore = create<MainState>((set, get) => {
     setState = set
     return {
         queue: testData,
-        completedTasks: [],
+        completedTasks: testCompletedTasks,
         selectedTaskId: "-1",
         terminalOutputs: {},
-        activeTab: TabNames.GENERATION_EDITOR,
+        activeTab: TabNames.COMPLETED_GENERATIONS,
         getTask: id => {
             return get().queue.find(item => item.id === id) ?? null
         },

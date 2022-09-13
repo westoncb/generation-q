@@ -21,7 +21,7 @@ export default function Terminal({ gTask }) {
     return (
         <div className="terminal">
             <div className="terminal-header">
-                <span>termainal output</span>
+                <span>terminal output</span>
                 <div
                     style={{
                         display: "flex",
