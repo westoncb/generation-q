@@ -540,19 +540,20 @@ body {
 }
 
 .gallery-item {
-    background-color: #c2c5c8;
-    border: 1px solid #bdccdb;
+    background-color: #d9dde4;
+    border: 1px solid #bbc7d1;
     border-radius: 5px;
     padding: 1rem;
     margin-right: 1rem;
     margin-bottom: 1rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.2);
     transition: all 150ms ease;
     cursor: pointer;
 
     &:hover {
-        transform: scale(1.02, 1.02);
-        box-shadow: 0 0.125rem 0.35rem rgba(0, 0, 0, 0.25);
+        transform: perspective(1000px) rotateY(15deg) rotateX(8deg)
+            scale(1.06, 1.06);
+        box-shadow: 0 0.25rem 0.85rem rgba(0, 0, 0, 0.4);
         animation: color-cycle 2s;
         animation-timing-function: ease;
         animation-iteration-count: infinite;
@@ -563,4 +564,77 @@ body {
     width: 10rem;
     height: 10rem;
     border-radius: 5px;
+}
+
+.full-view {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: black;
+    z-index: 100;
+    outline: 0;
+}
+
+.full-view-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+.full-view-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    flex-grow: 1;
+}
+
+.full-view-img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.change-image-btn {
+    flex-grow: 0;
+    padding: 1rem;
+    background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 150ms ease;
+    outline: 0;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.125);
+    }
+}
+
+.full-view-img {
+}
+
+.full-view-prompt {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    padding: 1rem;
+    color: #ccc;
+}
+
+.full-view-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
 }
