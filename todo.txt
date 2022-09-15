@@ -1,8 +1,5 @@
 implement Gallery
-    - fullscreen view
     - need to virtualize grid, can't just load everything
-    - items can be deleted or "re-run" (clone/run associated gTask)
-    - [maybe] 'curved grid' view
     - [maybe] back with sqlite db
 
 finish up Generation Editor
