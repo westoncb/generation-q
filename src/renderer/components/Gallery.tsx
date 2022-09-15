@@ -21,7 +21,7 @@ import {
     ArrowForward,
     DisplaySettings,
 } from "@mui/icons-material"
-
+import GenerationTask from "@src/generationTask"
 import DetailsDialog from "./DetailsDialog"
 
 const placeholders = [
@@ -284,7 +284,9 @@ function FullView({
                     </IconButton>
                     <IconButton
                         onClick={e => {
-                            showDetailsFunc()
+                            const t = new GenerationTask()
+                            t.copy(gTask, true)
+                            getState().addToQueue(t)
                         }}
                     >
                         <Refresh
