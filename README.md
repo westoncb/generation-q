@@ -40,7 +40,7 @@ Note: The project is currently configured to use Electron-Forge, which I persona
 
 ## Architecture overview
 
-If you've never used Electron before, the first thing you need to know is that it manages two separate processes: one of them is a Node process and the other is a Chromium javascript process, and the two have to pass messages to each other (Electron docs cover this).
+If you've never used Electron before, the first thing you need to know is that it manages two separate processes: one of them is a Node process and the other is a Chromium javascript process, and the two have to pass messages to each other (Electron docs cover this, but they're a bit involves; can probably just follow the pattern already in place).
 
 The two processes are called Node and Renderer.
 
