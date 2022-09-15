@@ -79,8 +79,9 @@ type MainState = {
     addToQueue?: (item: GenerationTask) => void
     updateQueue?: (newQueue: GenerationTask[]) => void
     removeFromQueue?: (id: string) => void
-    updateTask?: (item: GenerationTask) => void
     removeCompletedTask?: (id: string) => void
+    removeFromGallery?: (id: string) => void
+    updateTask?: (item: GenerationTask) => void
     getRunningTasks?: () => GenerationTask[]
     terminalOutputs?: { id: string } | {}
     updateTerminalOutput?: (id: string, newText: string) => void
@@ -125,6 +126,9 @@ const useStore = create<MainState>((set, get) => {
             set({
                 completedTasks: get().completedTasks.filter(t => t.id !== id),
             })
+        },
+        removeFromGallery: id => {
+            set({ gallery: get().gallery.filter(item => item.id !== id) })
         },
         getRunningTasks() {
             return get().queue.filter(

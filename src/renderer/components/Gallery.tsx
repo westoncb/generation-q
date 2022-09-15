@@ -1,6 +1,8 @@
 import React, { useState, useRef, useMemo, useEffect } from "react"
+import Button from "@mui/material/Button"
+import Snackbar from "@mui/material/Snackbar"
 import shallow from "zustand/shallow"
-import { useStore } from "../store"
+import { getState, useStore } from "../store"
 import placeholder1 from "../../../assets/images/placeholders/00024.png"
 import placeholder2 from "../../../assets/images/placeholders/00016.png"
 import placeholder3 from "../../../assets/images/placeholders/00036.png"
@@ -41,11 +43,15 @@ function randPlaceholder(index) {
     return placeholders[Math.floor(random(index) * placeholders.length)]
 }
 
+// Note: it's going to look like the delete function from the FullView isn't working; it's related
+// to how we select random placeholder images, it actually does work.
+
 export default function Gallery({}) {
     const { gallery } = useStore(state => ({ gallery: state.gallery }), shallow)
     const [filter, setFilter] = useState("")
     const [selectedItem, setSelectedItem] = useState(null)
     const [showDetailsDialog, setShowDetailsDialog] = useState(false)
+    const [deletePendingGTask, setDeletePendingGTask] = useState(null)
 
     const filteredGallery = useMemo(() => {
         return gallery.filter(
@@ -54,10 +60,17 @@ export default function Gallery({}) {
                 //TODO: Just checking id here so filtering can be tested, this should be deleted
                 gTask.id.toLowerCase().includes(filter.toLowerCase())
         )
-    }, [filter])
+    }, [filter, gallery])
 
     return (
         <div className="gallery">
+            <UndoDeletionSnackbar
+                isOpen={deletePendingGTask !== null}
+                close={() => {
+                    setDeletePendingGTask(null)
+                }}
+                gTask={deletePendingGTask}
+            />
             <FullView
                 show={selectedItem !== null}
                 gTask={selectedItem}
@@ -83,6 +96,10 @@ export default function Gallery({}) {
                             ]
                     )
                 }
+                deleteFunc={() => {
+                    // Note: actual deletion occurs in UndoDeletionSnackbar
+                    setDeletePendingGTask(selectedItem)
+                }}
             />
             {selectedItem !== null && (
                 <DetailsDialog
@@ -152,7 +169,15 @@ function isInFullscreen() {
 }
 
 const fullViewIconSize = "2.5rem"
-function FullView({ show, gTask, onClose, showDetailsFunc, nextImg, prevImg }) {
+function FullView({
+    show,
+    gTask,
+    onClose,
+    showDetailsFunc,
+    nextImg,
+    prevImg,
+    deleteFunc,
+}) {
     // We need to track there here instead of just using isInFullscreen() in order
     // to trigger re-renders when it changes
     const [inFSMode, setInFSMode] = useState(false)
@@ -246,7 +271,8 @@ function FullView({ show, gTask, onClose, showDetailsFunc, nextImg, prevImg }) {
                 <div className="full-view-footer">
                     <IconButton
                         onClick={e => {
-                            showDetailsFunc()
+                            onClose()
+                            deleteFunc()
                         }}
                     >
                         <Delete
@@ -283,5 +309,43 @@ function FullView({ show, gTask, onClose, showDetailsFunc, nextImg, prevImg }) {
                 </div>
             )}
         </div>
+    )
+}
+
+function UndoDeletionSnackbar({ isOpen, close, gTask }) {
+    const handleCloseAndDelete = () => {
+        close()
+        getState().removeFromGallery(gTask.id)
+    }
+
+    const action = (
+        <React.Fragment>
+            <Button
+                color="primary"
+                variant="contained"
+                size="small"
+                onClick={close}
+            >
+                UNDO
+            </Button>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleCloseAndDelete}
+            >
+                <Close fontSize="small" />
+            </IconButton>
+        </React.Fragment>
+    )
+
+    return (
+        <Snackbar
+            open={isOpen}
+            autoHideDuration={4000}
+            onClose={handleCloseAndDelete}
+            message="Image will be deleted"
+            action={action}
+        />
     )
 }
