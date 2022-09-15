@@ -5,6 +5,8 @@ Where it differs from a CLI (beyond just being visual) is that it manages a queu
 
 NOTE: **This is not functional for actual image generation yet!** I did the parts that require specialized knowledge around UI/UX/JS-frontend-stuff/Electron, and figure others who aren't particularly into that stuff but want a nice UI might pick up from here. This README includes additional sections to facilitate that process.
 
+NOTE2: Security. The current design is centered around taking a "command" and arguments in a very general way, and executing them through Node's `child_process.exec` or similar. I can see how in certain contexts this would be... extremely sketchy, but I believe doing it in this context should be fine as long as Electron's security guidelines for interprocess communication are followed. If not—if there's some fundamental issue here—feel free to let me know and I'll update this. If that is the case, it will mean the generality of this design is non-viable: BUT, it could still be specialized for more particular uses, i.e. tied more strongly to a particular model/script/params.
+
 ----
 
 Please do whatever you'd like with the source, I just put this together to continue the spirit of good will from the Stable Diffusion release (plus the design reflects what I want to use for image generation myself, so imo it should exist). If people want to add PRs here rather than forking... I'd participate as time allows, but I've never really done anything with open source + have a bit too much going on already. Feel free to message me with questions though.
@@ -37,8 +39,6 @@ Please do whatever you'd like with the source, I just put this together to conti
 - `yarn build`
 
 Note: The project is currently configured to use Electron-Forge, which I personally have not had good luck with (came with boilerplate I used to bootstrap project). And, the one time I tried making a production build for GenerationQ, the executable seemed overly large and the startup time was ludicrous (running dev server was quicker). I would recommend switching it over to [Electron Builder](https://www.electron.build/).
-
-Note2: Security. The current design is centered around taking a "command" and arguments in a very general way, and executing them through Node's `child_process.exec` or similar. I can see how in certain contexts this would be... extremely sketchy, but I believe doing it in this context should be fine as long as Electron's security guidelines for interprocess communication are followed. If not—if there's some fundamental issue here—feel free to let me know and I'll update this. If that is the case, it will mean the generality of this design is non-viable: BUT, it could still be specialized for more particular uses, i.e. tied more strongly to a particular model/script/params.
 
 <a name="architecture"/>
 
