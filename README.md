@@ -7,10 +7,13 @@ NOTE: in its current state the project is strictly the Electron desktop app, the
 
 I did the parts that require specialized knowledge around UI/UX/JS-frontend-stuff/Electron, and figure people who are more on the ML side of things (or just other programmers more generally) would not have too hard a time picking up from here. This README includes additional sections to facilitate that process.
 
-Please do whatever you'd like with the source, I just put this together to continue the spirit of good will from the Stable Diffusion release.
+Please do whatever you'd like with the source, I just put this together to continue the spirit of good will from the Stable Diffusion release (and partly because the design reflects what I wanted to use for image generation myself, so imo it should exist).
 
+<img src="https://user-images.githubusercontent.com/3360318/190360594-ca0e7da6-0a02-4160-aeb6-d920e15bdb8c.png" width="400">  |  <img src="https://user-images.githubusercontent.com/3360318/190360611-a55b3fe6-4959-444f-bb73-76ab8c43b2ba.png" width="400">
 
-https://user-images.githubusercontent.com/3360318/190328755-33c2236d-e607-4036-8351-4e4c3ec965e9.mov
+<img src="https://user-images.githubusercontent.com/3360318/190360618-95046e36-9c42-4bbb-b68b-fb915bcec61f.png" width="400"> | 
+<img src="https://user-images.githubusercontent.com/3360318/190360623-0125482d-5c86-497d-a82c-05b5684cefac.png" width="400">
+
 
 ## How to run
 
