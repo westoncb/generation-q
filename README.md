@@ -1,5 +1,5 @@
 # GenerationQ
-GenerationQ (for "image generation queue") is a cross-platform desktop application designed to provide a general purpose GUI for generating images via text2img and img2img models. Its primary target is Stable Diffusion but since there is such a variety of forked programs with their own particularities, the UI for configuring image generation tasks is designed to be generic enough to accommodate just about any script (even non-SD models).
+GenerationQ (for "image generation queue") is a cross-platform desktop application (screens below) designed to provide a general purpose GUI for generating images via text2img and img2img models. Its primary target is Stable Diffusion but since there is such a variety of forked programs with their own particularities, the UI for configuring image generation tasks is designed to be generic enough to accommodate just about any script (even non-SD models).
 
 Where it differs from a CLI (beyond just being visual) is that it manages a queue for you of generation tasks to be run, and gives a nice UI for prepping input images for img2img—and comes with an in-app "gallery" and a place to review completed tasks.
 
